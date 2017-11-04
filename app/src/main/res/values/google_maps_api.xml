@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    TODO: Replace w/ valid client api key before deployment.
+    -->
+    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
+        AIzaSyCvMD1G4-l9ahX0r9Jwb-1W3sohJA1-6NY
+    </string>
+</resources>
