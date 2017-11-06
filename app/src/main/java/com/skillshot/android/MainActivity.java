@@ -1,4 +1,4 @@
-package android.team_skillshot.com.team_skillshot;
+package com.skillshot.android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
