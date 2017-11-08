@@ -1,11 +1,16 @@
 package com.skillshot.android;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        if(googleServicesAvailable()){
+            Toast.makeText(this, "Good", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -78,5 +87,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+     * Check whether Google Play Services are available.
+	 *
+	 * If not, then display dialog allowing user to update Google Play Services
+	 *
+	 * @return true if available, or false if not
+     */
+    public boolean googleServicesAvailable(){
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int isAvailable = api.isGooglePlayServicesAvailable(this);
+        if(isAvailable == ConnectionResult.SUCCESS){
+            return true;
+        }else if (api.isUserResolvableError(isAvailable)){
+            Dialog dialog = api.getErrorDialog(this,isAvailable,0);
+            dialog.show();
+        }else{
+            Toast.makeText(this, "can't connect to play service", Toast.LENGTH_LONG).show();
+        }
+        return  false;
     }
 }
