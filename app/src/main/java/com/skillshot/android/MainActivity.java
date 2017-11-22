@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final int SKILL_SHOT_YELLOW = 42;
