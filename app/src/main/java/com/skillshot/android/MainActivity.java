@@ -33,8 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.List;
 
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback //, GoogleMap.OnMyLocationChangeListener
+    {
+
+//    private static final float METERS_100 = 100;
     private final int SKILL_SHOT_YELLOW = 42;
     private static final float DEFAULT_ZOOM = 15;
     public static double SHORTYS_LAT = 47.613834;
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static String TAG = MainActivity.class.getSimpleName();
 
     Location location = new Location();
+
+    float distance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +107,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         location.setAll_ages(locObject.getBoolean("all_ages"));
                         location.setNum_games(locObject.getInt("num_games"));
 
+
+                        float  latitude = location.getLatitude();
+                        float longitude = location.getLongitude();
+
+//                        onMyLocationChange(location);
+
+
                         addMarker(location);
 
+ 
 
                     }
                     // trigger refresh of recycler view
@@ -130,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             map.addMarker(new MarkerOptions()
             .position(lt)
             .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .snippet(location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+            .snippet(distance + ": " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
             .title(location.getName())).showInfoWindow();
         }
         else
@@ -206,4 +221,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return  false;
     }
+
+//    float distanceBetween(Location l1, Location l2)
+//    {
+//        float lat1= (float)l1.getLatitude();
+//        float lon1=(float)l1.getLongitude();
+//        float lat2=(float)l2.getLatitude();
+//        float lon2=(float)l2.getLongitude();
+//        float R = 6371; // km
+//        float dLat = (float)((lat2-lat1)*Math.PI/180);
+//        float dLon = (float)((lon2-lon1)*Math.PI/180);
+//        lat1 = (float)(lat1*Math.PI/180);
+//        lat2 = (float)(lat2*Math.PI/180);
+//
+//        float a = (float)(Math.sin(dLat/2) * Math.sin(dLat/2) +
+//                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2));
+//        float c = (float)(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+//        float d = R * c * 1000;
+//
+//        return d;
+//    }
+
+//    @Override
+//    public void onMyLocationChange(android.location.Location location) {
+//        Location target = new Location("target");
+//        List<LatLng> myLatlng = new ArrayList<>();
+//        for(int i = 0; i < myLatlng.size(); i++){
+//            myLatlng.add(new LatLng(location.getLatitude(), location.getLongitude()));
+//        }
+//        for(LatLng point : myLatlng) {
+//            target.setLatitude((float)point.latitude);
+//            target.setLongitude((float)point.longitude);
+//            if(location.distanceTo(myLatlng) < METERS_100) {
+//                // bingo!
+//            }
+//        }
+//    }
 }
