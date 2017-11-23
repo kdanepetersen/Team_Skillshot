@@ -19,6 +19,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +29,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.skillshot.android.request.LocationRequest;
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
@@ -36,7 +40,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback //, GoogleMap.OnMyLocationChangeListener
+import static com.skillshot.android.LocationsActivity.MILES_PER_METER;
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback
     {
 
 //    private static final float METERS_100 = 100;
@@ -46,13 +52,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static double SHORTYS_LONG = -122.345043;
     private GoogleMap map;
 
-    private static final String LOG_TAG = "Locations";
+        private Location userLocation = null;
+
+
 
     private static String TAG = MainActivity.class.getSimpleName();
 
-    Location location = new Location();
+    LocationsActivity locationsActivity;
 
-    float distance;
+        public static final float MILES_PER_METER = (float) 0.000621371192;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +76,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         if(googleServicesAvailable()){
             Toast.makeText(this, "Good", Toast.LENGTH_LONG).show();
         }
 
     }
+
 
 
     /**
@@ -107,16 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         location.setAll_ages(locObject.getBoolean("all_ages"));
                         location.setNum_games(locObject.getInt("num_games"));
 
-
-                        float  latitude = location.getLatitude();
-                        float longitude = location.getLongitude();
-
-//                        onMyLocationChange(location);
-
-
                         addMarker(location);
-
- 
 
                     }
                     // trigger refresh of recycler view
@@ -137,6 +140,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+        public float userDistance(double latitude, double longitude) {
+            float[] aDistance = new float[1];
+            android.location.Location.distanceBetween(getUserLocation().getLatitude(),
+                    getUserLocation().getLongitude(), latitude, longitude, aDistance);
+            return aDistance[0];
+        }
+
+
+
+        public String userDistanceString(com.skillshot.android.rest.model.Location location) {
+            return metersToMilesString(userDistance(location.getLatitude(), location.getLongitude()));
+        }
+
+        private String metersToMilesString(float meters) {
+            float distanceMiles = meters * MILES_PER_METER;
+            String formatString = distanceMiles > 1
+                    ? distanceMiles >= 10
+                    ? "%.0f"
+                    : "%.1f"
+                    : "%.2f";
+            return String.format(formatString + " mi", distanceMiles);
+        }
+
+        public float userDistance(com.skillshot.android.rest.model.Location location) {
+            return userDistance(location.getLatitude(), location.getLongitude());
+        }
+
+        public Location getUserLocation() {
+            return userLocation;
+        }
+
+        public void setUserLocation(Location userLocation) {
+            this.userLocation = userLocation;
+        }
+
     private void addMarker(Location location) {
         LatLng lt = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -145,8 +183,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             map.addMarker(new MarkerOptions()
             .position(lt)
             .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .snippet(distance + ": " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+            .snippet(location.getNum_games() + " games " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
             .title(location.getName())).showInfoWindow();
+
+//            .snippet(locationsActivity.numGamesString(location.getNum_games()) + " games " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
         }
         else
         {
@@ -222,39 +262,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return  false;
     }
 
-//    float distanceBetween(Location l1, Location l2)
-//    {
-//        float lat1= (float)l1.getLatitude();
-//        float lon1=(float)l1.getLongitude();
-//        float lat2=(float)l2.getLatitude();
-//        float lon2=(float)l2.getLongitude();
-//        float R = 6371; // km
-//        float dLat = (float)((lat2-lat1)*Math.PI/180);
-//        float dLon = (float)((lon2-lon1)*Math.PI/180);
-//        lat1 = (float)(lat1*Math.PI/180);
-//        lat2 = (float)(lat2*Math.PI/180);
-//
-//        float a = (float)(Math.sin(dLat/2) * Math.sin(dLat/2) +
-//                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2));
-//        float c = (float)(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-//        float d = R * c * 1000;
-//
-//        return d;
-//    }
 
-//    @Override
-//    public void onMyLocationChange(android.location.Location location) {
-//        Location target = new Location("target");
-//        List<LatLng> myLatlng = new ArrayList<>();
-//        for(int i = 0; i < myLatlng.size(); i++){
-//            myLatlng.add(new LatLng(location.getLatitude(), location.getLongitude()));
-//        }
-//        for(LatLng point : myLatlng) {
-//            target.setLatitude((float)point.latitude);
-//            target.setLongitude((float)point.longitude);
-//            if(location.distanceTo(myLatlng) < METERS_100) {
-//                // bingo!
-//            }
-//        }
-//    }
-}
+
+    }
