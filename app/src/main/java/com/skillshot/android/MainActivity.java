@@ -121,13 +121,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
                                 intent.putExtra("phone", location.getPhone());
                                 intent.putExtra("website", location.getUrl());
+                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
 
 //                intent.putExtra("age allowed", location.getNum_games());
                                 startActivity(intent);
 
                             }
                         });
- 
+
 
                         addMarker(location);
 

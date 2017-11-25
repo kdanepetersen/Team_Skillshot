@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.skillshot.android.rest.model.Location;
 
+import java.util.Locale;
+
 public class VenueDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context context;
@@ -41,11 +43,14 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        String venue_name = bundle.getString("name");
-        String venue_address = bundle.getString("address");
+        final String venue_name = bundle.getString("name");
+        final String venue_address = bundle.getString("address");
         final String venue_phone = bundle.getString("phone");
 //        double age = Double.valueOf(bundle.getString("age allowed"));
         final String venue_url = bundle.getString("website");
+        final float venue_lat = bundle.getFloat("lat");
+        final float venue_lng = bundle.getFloat("lng");
+
 
 
         venue_name_tv = findViewById(R.id.venue_name);
@@ -59,14 +64,11 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 
         venue_phone_call = (ImageView)findViewById(R.id.venue_phone_iv);
         venue_url_browse = (ImageView)findViewById(R.id.venue_url_iv );
+        venue_map_direction = (ImageView)findViewById(R.id.venue_map_iv);
 
         venue_phone_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (location == null) {
-//                    Toast.makeText(VenueDetailActivity.this, getString(R.string.Call_attempt), Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
                 Uri uri = Uri.fromParts("tel", "venue_phone", null);
                 Intent intent = new Intent(android.content.Intent.ACTION_DIAL, uri);
                 startActivity(intent);
@@ -85,15 +87,17 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
-//        venue_phone_call.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Uri uri = Uri.fromParts("tel", location.getPhone(), null);
-//                Intent intent = new Intent(android.content.Intent.ACTION_DIAL, uri);
-//                startActivity(intent);
-//            }
-//        });
 
+        venue_map_direction.setOnClickListener(new View.OnClickListener() {
+            @Override
+                    public void onClick(View v){
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", venue_lat, venue_lng, venue_address );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setPackage("com.google.android.apps.maps");
+                startActivity(intent);
+            }
+
+        });
     }
 
 
