@@ -40,14 +40,14 @@ import com.skillshot.android.rest.model.Location;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.skillshot.android.LocationsActivity.LOCATION_ID;
-import static com.skillshot.android.LocationsActivity.MILES_PER_METER;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//import static com.skillshot.android.LocationsActivity.LOCATION_ID;
+//import static com.skillshot.android.LocationsActivity.MILES_PER_METER;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
@@ -249,19 +249,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
-        switch (id){
+        switch (item.getItemId()){
             case R.id.action_settings:
                 return true;
             case R.id.venue_detail:
-                startActivity(new Intent(MainActivity.this, VenueDetailActivity.class));
-                break;
+
+//                startActivity(new Intent(this, VenueDetailActivity.class));
+//                return true;
+            Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            return  true;
             default:
-                return super.onOptionsItemSelected(item);
+                break;
 
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
 
