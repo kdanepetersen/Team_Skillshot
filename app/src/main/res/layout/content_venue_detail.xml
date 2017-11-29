@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.skillshot.android.VenueDetailActivity"
+    tools:showIn="@layout/activity_venue_detail">
+
+    <TextView
+        android:id="@+id/venue_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="venue name"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/venue_name"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="age"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/venue_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/age"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="address"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/venue_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="phone"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/venue_phone_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/phone" />
+
+        <ImageView
+            android:id="@+id/venue_url_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/internet" />
+
+        <ImageView
+            android:id="@+id/venue_map_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/marker" />
+
+    </LinearLayout>
+
+</LinearLayout>

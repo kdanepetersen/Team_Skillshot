@@ -1,12 +1,15 @@
 package com.skillshot.android;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -19,6 +22,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,26 +31,34 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.skillshot.android.request.LocationRequest;
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//import static com.skillshot.android.LocationsActivity.LOCATION_ID;
+//import static com.skillshot.android.LocationsActivity.MILES_PER_METER;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-
     private final int SKILL_SHOT_YELLOW = 42;
     private static final float DEFAULT_ZOOM = 15;
     public static double SHORTYS_LAT = 47.613834;
     public static double SHORTYS_LONG = -122.345043;
     private GoogleMap map;
-
-    private static final String LOG_TAG = "Locations";
-
+    private Location userLocation = null;
     private static String TAG = MainActivity.class.getSimpleName();
+    public static final float MILES_PER_METER = (float) 0.000621371192;
 
-    Location location = new Location();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +76,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(googleServicesAvailable()){
             Toast.makeText(this, "Good", Toast.LENGTH_LONG).show();
         }
-
     }
+
 
 
     /**
@@ -82,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onResponse(JSONArray response) {
                 Log.d("JSON", "onResponse");
                 try {
-                    Location location = new Location();
+                    final Location location = new Location();
                     for(int i = 0; i < response.length(); i++){
 
-                        JSONObject locObject = (JSONObject) response
+                        final JSONObject locObject = (JSONObject) response
                                 .get(i);
 
                         location.setId(locObject.getString("id"));
@@ -100,7 +113,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         location.setAll_ages(locObject.getBoolean("all_ages"));
                         location.setNum_games(locObject.getInt("num_games"));
 
+                        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
+                                intent.putExtra("name", location.getName());
+                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+                                intent.putExtra("phone", location.getPhone());
+                                intent.putExtra("website", location.getUrl());
+                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+
+//                intent.putExtra("age allowed", location.getNum_games());
+                                startActivity(intent);
+
+                            }
+                        });
+
+
                         addMarker(location);
+
 
 
                     }
@@ -122,23 +153,70 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    private void addMarker(Location location) {
+        public float userDistance(double latitude, double longitude) {
+            float[] aDistance = new float[1];
+            android.location.Location.distanceBetween(getUserLocation().getLatitude(),
+                    getUserLocation().getLongitude(), latitude, longitude, aDistance);
+            return aDistance[0];
+        }
+
+
+
+        public String userDistanceString(com.skillshot.android.rest.model.Location location) {
+            return metersToMilesString(userDistance(location.getLatitude(), location.getLongitude()));
+        }
+
+        private String metersToMilesString(float meters) {
+            float distanceMiles = meters * MILES_PER_METER;
+            String formatString = distanceMiles > 1
+                    ? distanceMiles >= 10
+                    ? "%.0f"
+                    : "%.1f"
+                    : "%.2f";
+            return String.format(formatString + " mi", distanceMiles);
+        }
+
+        public float userDistance(com.skillshot.android.rest.model.Location location) {
+            return userDistance(location.getLatitude(), location.getLongitude());
+        }
+
+        public Location getUserLocation() {
+            return userLocation;
+        }
+
+        public void setUserLocation(Location userLocation) {
+            this.userLocation = userLocation;
+        }
+
+    private void addMarker(final Location location) {
         LatLng lt = new LatLng(location.getLatitude(), location.getLongitude());
 
-        if (location.getCity().equals("Seattle"))
-        {
+//        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+//            @Override
+//            public void onInfoWindowClick(Marker marker) {
+//                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
+//                intent.putExtra("name", location.getName());
+//                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+//                intent.putExtra("phone", location.getPhone());
+//                intent.putExtra("website", location.getUrl());
+//
+////                intent.putExtra("age allowed", location.getNum_games());
+//                startActivity(intent);
+//
+//            }
+//        });
+        if (location.getCity().equals(" ")){
             map.addMarker(new MarkerOptions()
-            .position(lt)
-            .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .snippet(location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
-            .title(location.getName())).showInfoWindow();
+                    .position(lt)
+                    .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
+                    .title(location.getName())).showInfoWindow();
         }
-        else
-        {
+        else {
             map.addMarker(new MarkerOptions()
-            .position(lt)
-            .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .title(location.getName())).showInfoWindow();
+                    .position(lt)
+                    .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
+                    .snippet(location.getNum_games() + " games " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+                    .title(location.getName())).showInfoWindow();
         }
     }
 
@@ -156,18 +234,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap mapView) {
-        CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(SHORTYS_LAT,
-                        SHORTYS_LONG));
+        CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(SHORTYS_LAT, SHORTYS_LONG));
         CameraUpdate zoom=CameraUpdateFactory.zoomTo(DEFAULT_ZOOM);
 
         mapView.moveCamera(center);
         mapView.animateCamera(zoom);
-
         map = mapView;
 
         loadMarkers();
-
     }
 
     @Override
@@ -175,13 +249,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                return true;
+            case R.id.venue_detail:
+
+//                startActivity(new Intent(this, VenueDetailActivity.class));
+//                return true;
+            Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            return  true;
+            default:
+                break;
+
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -206,4 +288,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return  false;
     }
-}
+    }
