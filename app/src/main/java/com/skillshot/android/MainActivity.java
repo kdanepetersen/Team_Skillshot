@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location userLocation = null;
     private static String TAG = MainActivity.class.getSimpleName();
     public static final float MILES_PER_METER = (float) 0.000621371192;
+    private JSONObject locationData;
 
 
     @Override
@@ -98,24 +99,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     final Location location = new Location();
                     for(int i = 0; i < response.length(); i++){
 
-                        final JSONObject locObject = (JSONObject) response
+                        locationData = (JSONObject) response
                                 .get(i);
 
-                        location.setId(locObject.getString("id"));
-                        location.setName(locObject.getString("name"));
-                        location.setAddress(locObject.getString("address"));
-                        location.setCity(locObject.getString("city"));
-                        location.setPostal_code(locObject.getString("postal_code"));
-                        location.setLatitude((float)locObject.getDouble("latitude"));
-                        location.setLongitude((float)locObject.getDouble("longitude"));
-                        location.setPhone(locObject.getString("phone"));
-                        location.setUrl(locObject.getString("url"));
-                        location.setAll_ages(locObject.getBoolean("all_ages"));
-                        location.setNum_games(locObject.getInt("num_games"));
+                        location.setId(locationData.getString("id"));
+                        location.setName(locationData.getString("name"));
+                        location.setAddress(locationData.getString("address"));
+                        location.setCity(locationData.getString("city"));
+                        location.setPostal_code(locationData.getString("postal_code"));
+                        location.setLatitude((float)locationData.getDouble("latitude"));
+                        location.setLongitude((float)locationData.getDouble("longitude"));
+                        location.setPhone(locationData.getString("phone"));
+                        location.setUrl(locationData.getString("url"));
+                        location.setAll_ages(locationData.getBoolean("all_ages"));
+                        location.setNum_games(locationData.getInt("num_games"));
+
+                         addMarker(location);
 
                         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                             @Override
                             public void onInfoWindowClick(Marker marker) {
+                                // marker id is like this - 'm11'. the integer portion can be used to locate correct data record
+                                int index = Integer.parseInt(marker.getId().substring(1));
+
+                                // replace 'location' here w/ correct JSON object at 'index'
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
                                 intent.putExtra("name", location.getName());
                                 intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
@@ -128,10 +135,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             }
                         });
-
-
-                        addMarker(location);
-
 
 
                     }
