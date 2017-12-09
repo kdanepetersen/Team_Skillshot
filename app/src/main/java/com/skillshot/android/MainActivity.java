@@ -40,14 +40,6 @@ import com.skillshot.android.rest.model.Location;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-//
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//import static com.skillshot.android.LocationsActivity.LOCATION_ID;
-//import static com.skillshot.android.LocationsActivity.MILES_PER_METER;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
@@ -120,17 +112,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             @Override
                             public void onInfoWindowClick(Marker marker) {
                                 // marker id is like this - 'm11'. the integer portion can be used to locate correct data record
-                                int index = Integer.parseInt(marker.getId().substring(1));
+//                                int index = Integer.parseInt(marker.getId().substring(1));
 
                                 // replace 'location' here w/ correct JSON object at 'index'
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-                                intent.putExtra("name", location.getName());
-                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-                                intent.putExtra("phone", location.getPhone());
-                                intent.putExtra("website", location.getUrl());
-                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+                                intent.putExtra("name", marker.getTitle());
+                                intent.putExtra("address", marker.getSnippet());
 
-//                intent.putExtra("age allowed", location.getNum_games());
+//                                intent.putExtra("name", location.getName());
+//                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+//                                intent.putExtra("phone", location.getPhone());
+//                                intent.putExtra("website", location.getUrl());
+//                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+//                                  intent.putExtra("age allowed", location.getNum_games());
                                 startActivity(intent);
 
                             }
@@ -194,20 +188,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void addMarker(final Location location) {
         LatLng lt = new LatLng(location.getLatitude(), location.getLongitude());
 
-//        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//            @Override
-//            public void onInfoWindowClick(Marker marker) {
-//                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-//                intent.putExtra("name", location.getName());
-//                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-//                intent.putExtra("phone", location.getPhone());
-//                intent.putExtra("website", location.getUrl());
-//
-////                intent.putExtra("age allowed", location.getNum_games());
-//                startActivity(intent);
-//
-//            }
-//        });
         if (location.getCity().equals(" ")){
             map.addMarker(new MarkerOptions()
                     .position(lt)
@@ -218,8 +198,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             map.addMarker(new MarkerOptions()
                     .position(lt)
                     .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-                    .snippet(location.getNum_games() + " games " + location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
-                    .title(location.getName())).showInfoWindow();
+                    .snippet(location.getNum_games()  + " games \n\n"  + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code() + "\n" + location.getPhone())
+                    .title(location.getName()))
+                    .showInfoWindow();
         }
     }
 
@@ -257,12 +238,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()){
             case R.id.action_settings:
                 return true;
-            case R.id.venue_detail:
+            case R.id.action_venue_detail:
 
 //                startActivity(new Intent(this, VenueDetailActivity.class));
 //                return true;
-            Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-            return  true;
+                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                return  true;
             default:
                 break;
 
@@ -273,9 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /*
      * Check whether Google Play Services are available.
-	 *
-	 * If not, then display dialog allowing user to update Google Play Services
-	 *
+	 * If not, then display dialog allowing user to update Google Play Services 
 	 * @return true if available, or false if not
      */
     public boolean googleServicesAvailable(){
