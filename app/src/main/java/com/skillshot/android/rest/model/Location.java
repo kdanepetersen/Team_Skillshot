@@ -80,7 +80,7 @@ public class Location implements Serializable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public boolean isAll_ages() {
+		public boolean isAll_ages() {
 		return all_ages;
 	}
 	public void setAll_ages(boolean all_ages) {

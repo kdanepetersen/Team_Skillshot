@@ -9,7 +9,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/venue_detail"
+        android:id="@+id/action_venue_detail"
         android:title="Venue"
         app:showAsAction="ifRoom"/>
 </menu>
