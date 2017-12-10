@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -20,10 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,8 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.skillshot.android.request.LocationRequest;
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
@@ -50,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location userLocation = null;
     private static String TAG = MainActivity.class.getSimpleName();
     public static final float MILES_PER_METER = (float) 0.000621371192;
+
+//    private JSONObject locationData;
+
+
+    private Location[] locations;
     private JSONObject locationData;
 
 
@@ -71,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
-
     /**
      * Method to make json object request where json response starts wtih {
      * */
@@ -87,9 +83,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("JSON", "onResponse");
+                locations = new Location[response.length()];
                 try {
-                    final Location location = new Location();
                     for(int i = 0; i < response.length(); i++){
+                        Location location = new Location();
 
                         locationData = (JSONObject) response
                                 .get(i);
@@ -106,25 +103,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         location.setAll_ages(locationData.getBoolean("all_ages"));
                         location.setNum_games(locationData.getInt("num_games"));
 
-                         addMarker(location);
+ 
+                        locations[i] = location; // add to locations list for later use
+
+                        addMarker(location);
+
 
                         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                             @Override
                             public void onInfoWindowClick(Marker marker) {
-                                // marker id is like this - 'm11'. the integer portion can be used to locate correct data record
-//                                int index = Integer.parseInt(marker.getId().substring(1));
 
-                                // replace 'location' here w/ correct JSON object at 'index'
+                                int index = Integer.parseInt(marker.getId().substring(1));
+                                Location location = locations[index];
+
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-                                intent.putExtra("name", marker.getTitle());
-                                intent.putExtra("address", marker.getSnippet());
-
-//                                intent.putExtra("name", location.getName());
-//                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-//                                intent.putExtra("phone", location.getPhone());
-//                                intent.putExtra("website", location.getUrl());
-//                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
-//                                  intent.putExtra("age allowed", location.getNum_games());
+                                intent.putExtra("name", location.getName());
+                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+                                intent.putExtra("phone", location.getPhone());
+                                intent.putExtra("website", location.getUrl());
+                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+                                intent.putExtra("age allowed", location.isAll_ages());
                                 startActivity(intent);
 
                             }
@@ -132,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     }
-                    // trigger refresh of recycler view
 
                 } catch (JSONException e) {
                     Log.d("JSON", e.getMessage());
@@ -193,14 +190,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .position(lt)
                     .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
                     .title(location.getName())).showInfoWindow();
+
         }
         else {
             map.addMarker(new MarkerOptions()
                     .position(lt)
                     .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-                    .snippet(location.getNum_games()  + " games \n\n"  + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code() + "\n" + location.getPhone())
-                    .title(location.getName()))
-                    .showInfoWindow();
+
+//                    .snippet(location.getNum_games()  + " games \n\n"  + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code() + "\n" + location.getPhone())
+//                    .title(location.getName()))
+//                    .showInfoWindow();
+
+                    .snippet(location.getNum_games() + " games " + location.getName() + location.getId() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+                    .title(location.getName())).showInfoWindow();
+
         }
     }
 

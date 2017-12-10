@@ -69,6 +69,17 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         venue_url_browse = (ImageView)findViewById(R.id.venue_url_iv );
         venue_map_direction = (ImageView)findViewById(R.id.venue_map_iv);
 
+        //onclicking the phone icon, call can be made
+        venue_phone_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.fromParts("tel", venue_phone, null);
+                Intent intent = new Intent(android.content.Intent.ACTION_DIAL, uri);
+                startActivity(intent);
+
+            }
+        });
+
         //on click of the globe icon, a url opens the website of the business
         venue_url_browse.setOnClickListener(new View.OnClickListener() {
             @Override
