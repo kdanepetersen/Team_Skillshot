@@ -46,12 +46,10 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         final String venue_name = bundle.getString("name");
         final String venue_address = bundle.getString("address");
         final String venue_phone = bundle.getString("phone");
-//        double age = Double.valueOf(bundle.getString("age allowed"));
+        boolean age = bundle.getBoolean("age allowed");
         final String venue_url = bundle.getString("website");
         final float venue_lat = bundle.getFloat("lat");
         final float venue_lng = bundle.getFloat("lng");
-
-
 
         venue_name_tv = findViewById(R.id.venue_name);
         venue_age_tv = findViewById(R.id.age);
@@ -61,21 +59,28 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         venue_name_tv.setText(venue_name);
         venue_address_tv.setText(venue_address);
         venue_phone_tv.setText(venue_phone);
+        if(age){
+            venue_age_tv.setText("No age restriction");
+        }else{
+            venue_age_tv.setText("21+");
+        }
 
         venue_phone_call = (ImageView)findViewById(R.id.venue_phone_iv);
         venue_url_browse = (ImageView)findViewById(R.id.venue_url_iv );
         venue_map_direction = (ImageView)findViewById(R.id.venue_map_iv);
 
+        //onclicking the phone icon, call can be made
         venue_phone_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.fromParts("tel", "venue_phone", null);
+                Uri uri = Uri.fromParts("tel", venue_phone, null);
                 Intent intent = new Intent(android.content.Intent.ACTION_DIAL, uri);
                 startActivity(intent);
 
             }
         });
 
+        //on click of the globe icon, a url opens the website of the business
         venue_url_browse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,12 +93,16 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         });
 
 
+        //on click of the map marker icon, map of that particular locations opens
         venue_map_direction.setOnClickListener(new View.OnClickListener() {
             @Override
-                    public void onClick(View v){
-                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f (%s)", venue_lat, venue_lng, venue_address );
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                intent.setPackage("com.google.android.apps.maps");
+            public void onClick(View v){
+                String uriBegin = "geo:0,0";
+                String query = venue_address;
+                String encodedQuery = Uri.encode(query);
+                String uriString = uriBegin + "?q=" + encodedQuery;
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
 
