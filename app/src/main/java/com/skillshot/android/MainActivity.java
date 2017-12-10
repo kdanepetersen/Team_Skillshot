@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /*
      * Check whether Google Play Services are available.
-	 * If not, then display dialog allowing user to update Google Play Services
+	 * If not, then display dialog allowing user to update Google Play Services 
 	 * @return true if available, or false if not
      */
     public boolean googleServicesAvailable(){
