@@ -11,6 +11,9 @@
     <string name="action_list">List</string>
     <string name="action_map">Map</string>
     <string name="website">Website</string>
+    <string name="footer_map">Map</string>
+    <string name="footer_list">List</string>
+    <string name="footer_description">Description</string>
     <string name="mapToThisLocation">Map to this location</string>
     <string name="callThisLocation">Call this location</string>
     <string name="action_add_game">Add game</string>

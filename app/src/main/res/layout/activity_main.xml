@@ -4,12 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.team_skillshot.com.team_skillshot.MainActivity">
+    tools:context="com.skillshot.android.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include
+            layout="@layout/header"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,6 +26,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:layout_gravity="bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/footer"
+        android:layout_width="374dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </android.support.design.widget.CoordinatorLayout>
