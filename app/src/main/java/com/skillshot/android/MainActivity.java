@@ -62,6 +62,11 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
         ImageButton footer_list=(ImageButton)findViewById(R.id.footer_list);
         ImageButton footer_description=(ImageButton)findViewById(R.id.footer_description);
+        ImageButton backarrow=(ImageButton)findViewById(R.id.backarrow);
+        ImageButton page_title=(ImageButton)findViewById(R.id.page_title);
+        ImageButton skillshotlogo=(ImageButton)findViewById(R.id.skillshotlogo);
+        ImageButton allages=(ImageButton)findViewById(R.id.allages);
+        ImageButton list_search=(ImageButton)findViewById(R.id.list_search);
 
         footer_map.setOnClickListener(new View.OnClickListener()
         {
@@ -82,6 +87,50 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         });
 
         footer_description.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backarrow.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        page_title.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        skillshotlogo.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        allages.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        list_search.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
