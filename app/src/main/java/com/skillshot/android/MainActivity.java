@@ -1,6 +1,7 @@
 package com.skillshot.android;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,8 +11,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.ImageButton;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.content.Intent;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,7 +20,6 @@ import com.android.volley.toolbox.Volley;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.skillshot.android.rest.model.Location;
 
@@ -37,26 +36,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public abstract class MainActivity extends AppCompatActivity implements OnMapReadyCallback,OnClickListener {
-
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
     private static final float DEFAULT_ZOOM = 15;
     public static double SHORTYS_LAT = 47.613834;
     public static double SHORTYS_LONG = -122.345043;
     private GoogleMap map;
-
-    private static final String LOG_TAG = "Locations";
-
+    private Location userLocation = null;
     private static String TAG = MainActivity.class.getSimpleName();
+    public static final float MILES_PER_METER = (float) 0.000621371192;
 
-    Location location = new Location();
+    private Location[] locations;
+    private JSONObject locationData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
@@ -146,7 +145,6 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         if(googleServicesAvailable()){
             Toast.makeText(this, "Good", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
@@ -163,30 +161,53 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("JSON", "onResponse");
+                locations = new Location[response.length()];
                 try {
-                    Location location = new Location();
                     for(int i = 0; i < response.length(); i++){
+                        Location location = new Location();
 
-                        JSONObject locObject = (JSONObject) response
+                        locationData = (JSONObject) response
                                 .get(i);
 
-                        location.setId(locObject.getString("id"));
-                        location.setName(locObject.getString("name"));
-                        location.setAddress(locObject.getString("address"));
-                        location.setCity(locObject.getString("city"));
-                        location.setPostal_code(locObject.getString("postal_code"));
-                        location.setLatitude((float)locObject.getDouble("latitude"));
-                        location.setLongitude((float)locObject.getDouble("longitude"));
-                        location.setPhone(locObject.getString("phone"));
-                        location.setUrl(locObject.getString("url"));
-                        location.setAll_ages(locObject.getBoolean("all_ages"));
-                        location.setNum_games(locObject.getInt("num_games"));
+                        location.setId(locationData.getString("id"));
+                        location.setName(locationData.getString("name"));
+                        location.setAddress(locationData.getString("address"));
+                        location.setCity(locationData.getString("city"));
+                        location.setPostal_code(locationData.getString("postal_code"));
+                        location.setLatitude((float)locationData.getDouble("latitude"));
+                        location.setLongitude((float)locationData.getDouble("longitude"));
+                        location.setPhone(locationData.getString("phone"));
+                        location.setUrl(locationData.getString("url"));
+                        location.setAll_ages(locationData.getBoolean("all_ages"));
+                        location.setNum_games(locationData.getInt("num_games"));
+
+ 
+                        locations[i] = location; // add to locations list for later use
 
                         addMarker(location);
 
 
+                        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+
+                                int index = Integer.parseInt(marker.getId().substring(1));
+                                Location location = locations[index];
+
+                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
+                                intent.putExtra("name", location.getName());
+                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+                                intent.putExtra("phone", location.getPhone());
+                                intent.putExtra("website", location.getUrl());
+                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+                                intent.putExtra("age allowed", location.isAll_ages());
+                                startActivity(intent);
+
+                            }
+                        });
+
+
                     }
-                    // trigger refresh of recycler view
 
                 } catch (JSONException e) {
                     Log.d("JSON", e.getMessage());
@@ -204,23 +225,63 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
 
     }
 
-    private void addMarker(Location location) {
+        public float userDistance(double latitude, double longitude) {
+            float[] aDistance = new float[1];
+            android.location.Location.distanceBetween(getUserLocation().getLatitude(),
+                    getUserLocation().getLongitude(), latitude, longitude, aDistance);
+            return aDistance[0];
+        }
+
+
+
+        public String userDistanceString(com.skillshot.android.rest.model.Location location) {
+            return metersToMilesString(userDistance(location.getLatitude(), location.getLongitude()));
+        }
+
+        private String metersToMilesString(float meters) {
+            float distanceMiles = meters * MILES_PER_METER;
+            String formatString = distanceMiles > 1
+                    ? distanceMiles >= 10
+                    ? "%.0f"
+                    : "%.1f"
+                    : "%.2f";
+            return String.format(formatString + " mi", distanceMiles);
+        }
+
+        public float userDistance(com.skillshot.android.rest.model.Location location) {
+            return userDistance(location.getLatitude(), location.getLongitude());
+        }
+
+        public Location getUserLocation() {
+            return userLocation;
+        }
+
+        public void setUserLocation(Location userLocation) {
+            this.userLocation = userLocation;
+        }
+
+    private void addMarker(final Location location) {
         LatLng lt = new LatLng(location.getLatitude(), location.getLongitude());
 
-        if (location.getCity().equals("Seattle"))
-        {
+        if (location.getCity().equals(" ")){
             map.addMarker(new MarkerOptions()
-            .position(lt)
-            .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .snippet(location.getName() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
-            .title(location.getName())).showInfoWindow();
+                    .position(lt)
+                    .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
+                    .title(location.getName())).showInfoWindow();
+
         }
-        else
-        {
+        else {
             map.addMarker(new MarkerOptions()
-            .position(lt)
-            .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-            .title(location.getName())).showInfoWindow();
+                    .position(lt)
+                    .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
+
+//                    .snippet(location.getNum_games()  + " games \n\n"  + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code() + "\n" + location.getPhone())
+//                    .title(location.getName()))
+//                    .showInfoWindow();
+
+                    .snippet(location.getNum_games() + " games " + location.getName() + location.getId() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+                    .title(location.getName())).showInfoWindow();
+
         }
     }
 
@@ -238,18 +299,14 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
      */
     @Override
     public void onMapReady(GoogleMap mapView) {
-        CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(SHORTYS_LAT,
-                        SHORTYS_LONG));
+        CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(SHORTYS_LAT, SHORTYS_LONG));
         CameraUpdate zoom=CameraUpdateFactory.zoomTo(DEFAULT_ZOOM);
 
         mapView.moveCamera(center);
         mapView.animateCamera(zoom);
-
         map = mapView;
 
         loadMarkers();
-
     }
 
     @Override
@@ -257,22 +314,28 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                return true;
+            case R.id.action_venue_detail:
+
+//                startActivity(new Intent(this, VenueDetailActivity.class));
+//                return true;
+                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                return  true;
+            default:
+                break;
+
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
     /*
      * Check whether Google Play Services are available.
-	 *
-	 * If not, then display dialog allowing user to update Google Play Services
-	 *
+	 * If not, then display dialog allowing user to update Google Play Services 
 	 * @return true if available, or false if not
      */
     public boolean googleServicesAvailable(){
@@ -288,5 +351,4 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         }
         return  false;
     }
-
 }
