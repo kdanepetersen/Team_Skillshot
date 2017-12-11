@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:weightSum="3"
+    android:background="#000"
+    android:gravity="center_horizontal" >
+
+
+    <ImageButton
+        android:id="@+id/footer_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/map_button_default"
+        android:onClick="footer_map"
+        android:text="@string/footer_map"/>
+
+    <ImageButton
+        android:id="@+id/footer_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/list_button_default"
+        android:onClick="footer_list"
+        android:text="@string/footer_list"/>
+
+    <ImageButton
+        android:id="@+id/footer_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="1"
+        android:background="@drawable/description_button_default"
+        android:onClick="footer_description"
+        android:text="@string/footer_description"/>
+
+</LinearLayout>
