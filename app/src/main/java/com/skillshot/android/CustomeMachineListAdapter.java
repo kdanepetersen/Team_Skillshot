@@ -3,6 +3,7 @@ package com.skillshot.android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.skillshot.android.AppController.TAG;
+
 public class CustomeMachineListAdapter extends BaseAdapter{
 
     private Activity activity;
     private LayoutInflater inflater;
-    private ArrayList<JSONObject> venues;
+    private List<Location> venues;
     private MainActivity mainActivity;
 
-    public CustomeMachineListAdapter(Activity activity, ArrayList<JSONObject> venues) {
+    public CustomeMachineListAdapter(Activity activity, List<Location> venues) {
         this.activity = activity;
         this.venues = venues;
     }
@@ -52,17 +55,21 @@ public class CustomeMachineListAdapter extends BaseAdapter{
         if (convertView == null)
             convertView = inflater.inflate(R.layout.machine_list_row, null);
 
-
         TextView locationName = (TextView) convertView.findViewById(R.id.machine_row);
 
         // getting venues data for the row
-        String l = venues.get(position).toString();
+//        mainActivity.getTitle();
 
+//        Log.d(TAG, "ghe " +  mainActivity.getTitle());
+//        venues.add(location);
+        Location l = venues.get(position);
+
+        Log.d(TAG, "gg: " + l);
 //        String venueName = venues.set(position, venues.get(position) );
 
 
         // name
-        locationName.setText(l); ;
+        locationName.setText(l.getName()); ;
 
 
 

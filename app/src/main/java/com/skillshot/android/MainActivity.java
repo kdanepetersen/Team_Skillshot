@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     String url = "https://skill-shot-dev.herokuapp.com/";
     String url_locations = String.format("%s/locations.json", url);
 
+    private Location[] locations;
+    private JSONObject locationData;
+
     //..................
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog pDialog;
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //.................
 
 
-    ArrayList<JSONObject> venues = new ArrayList<>();
+//    ArrayList<JSONObject> venues = new ArrayList<>();
 
     List<Location> machineList = new ArrayList<>();
     
@@ -193,33 +196,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * Method to make json object request where json response starts wtih {
      * */
-    private void loadMarkers() {
+    public void loadMarkers() {
         Log.d("JSON", "loadMarkers");
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonReq = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("JSON", "onResponse");
+                locations = new Location[response.length()];
                 try {
-                    final Location location = new Location();
                     for(int i = 0; i < response.length(); i++){
+
+                        Location location = new Location();
+
                         final JSONObject locObject = (JSONObject) response.get(i);
 
                         //adding each element to an arraylist
-                        venues.add(locObject);
-
-                        Log.d(TAG, "Ghebrehiwet " + locObject.getString("name"));
-//                        getting all objects in a list
-                        if (venues != null) {
-                            for (i = 0; i < venues.size(); i++) {
-                                JSONObject venue = venues.get(i);
-                                Log.d(TAG, "Ghebre "+ venue);
-//                                String nameObject = venue.getJSONObject(locObject.getString("name")).toString();
+//                        venues.add(locObject);
+//
+//                        Log.d(TAG, "Ghebrehiwet " + locObject.getString("name"));
+////                        getting all objects in a list
+//                        if (venues != null) {
+//                            for (i = 0; i < venues.size(); i++) {
+//                                JSONObject venue = venues.get(i);
+////                                Log.d(TAG, "Ghebre "+ venue);
+//                                String nameObject = venue.getString("name");
 //                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
 //                                intent.putExtra("nameObject",nameObject);
 //                                Log.d(TAG, "Ghebre "+ nameObject);
-                            }
-                        }
+//                            }
+//                        }
 
 
                         location.setId(locObject.getString("id"));
@@ -235,42 +241,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         location.setNum_games(locObject.getInt("num_games"));
 
 
+                        locations[i] = location;
+
+                        addMarker(location);
 
                         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                             @Override
                             public void onInfoWindowClick(Marker marker) {
                                 int index = Integer.parseInt(marker.getId().substring(1));
+                                Location location = locations[index];
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-                                Log.d(TAG,  "Ghebre " + index);
-
-//                                intent.putExtra("address", index);
-//                                intent.putExtra("phone", index);
-//                                intent.putExtra("website", index);
-//                                intent.putExtra("latlng", index);
-//                                intent.putExtra("age allowed", index);
-
-                                intent.putExtra("name", marker.getTitle() );
-
-                                intent.putExtra("address", marker.getSnippet());
 
 
-//                                 Log.d(TAG, "ghebre " + marker.getTag());
-//                                intent.putExtra("address", marker.getId().concat(location.getAddress()) + ", " + marker.getId().concat(location.getCity()) + ", " + marker.getId().concat(location.getPostal_code()));
-//                                intent.putExtra("website", marker.getId().concat(location.getUrl()));
-//                                intent.putExtra("phone", marker.getId().concat(location.getPhone()));
-
-//                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-//                                intent.putExtra("phone", location.getPhone());
-//                                intent.putExtra("website", location.getUrl());
-//                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+//                                intent.putExtra("name", marker.getTitle() );
 //
-//                                intent.putExtra("age allowed", location.isAll_ages());
+//                                intent.putExtra("address", marker.getSnippet());
+
+
+                                intent.putExtra("name", location.getName());
+                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+                                intent.putExtra("phone", location.getPhone());
+                                intent.putExtra("website", location.getUrl());
+                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+                                intent.putExtra("age allowed", location.isAll_ages());
                                 startActivity(intent);
 
                             }
                         });
-//                        Log.d(TAG, "Ghebre " + location.getName());
-                        addMarker(location);
+
                     }
                 } catch (JSONException e) {
                     Log.d("JSON", e.getMessage());
@@ -340,9 +338,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 map.addMarker(new MarkerOptions()
                         .position(lt)
                         .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
-                        .snippet(location.getNum_games()  + " games \n\n"  + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code() + "\n" + location.getPhone())
-                        .title(location.getName()))
-                        .showInfoWindow();
+                        .snippet(location.getNum_games() + " games " + location.getName() + location.getId() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
+                        .title(location.getName())).showInfoWindow();
             }
 
     }

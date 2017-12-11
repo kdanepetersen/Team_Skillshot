@@ -1,31 +1,27 @@
 package com.skillshot.android;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
@@ -34,7 +30,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class VenueDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,14 +50,17 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog pDialog;
-    private List<Location> machineList = new ArrayList<>();
+//    private List<Location> machineList = new ArrayList<>();
     private ListView listView;
     private CustomeMachineListAdapter machineAdapter;
 
     //.................
 
 
-    ArrayList<JSONObject> venues = new ArrayList<>();
+    List<Location> venues = new ArrayList<>();
+    // json array response url
+    String url = "https://skill-shot-dev.herokuapp.com/";
+    String url_locations = String.format("%s/locations.json", url);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,11 +136,45 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 
         });
 
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest locReq = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                hidePDialog();
+                //parsing json
+//                locations = new Location[response.length()];
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject obj = response.getJSONObject(i);
+                        Location location = new Location();
+                        location.setName(obj.getString("name"));
+                        venues.add(location);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                machineAdapter.notifyDataSetChanged();
+            }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("JSON", "Error: " + error.getMessage());
+                }
+
+            });
+
+        queue.add(locReq);
+//        AppController.getInstance().addToRequestQueue(locReq);
 
 
+
+
+//        venues.add();
 //        //........................
             listView = (ListView) findViewById(R.id.machine_list);
-            machineAdapter = new CustomeMachineListAdapter(this, venues );
+
+             machineAdapter = new CustomeMachineListAdapter(this, (ArrayList<Location>) venues);
 //            machineAdapter = new CustomeMachineListAdapter(this, v);
             listView.setAdapter(machineAdapter);
 
