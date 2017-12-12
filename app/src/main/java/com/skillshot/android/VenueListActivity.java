@@ -68,10 +68,7 @@ public class VenueListActivity extends AppCompatActivity {
     RecyclerView.LayoutManager recylerViewLayoutManager;
 
     // create the list of items to display in the Image Adapter List - creates the itemList array private to this class
-    private List<Items> itemList = new ArrayList<>();
-
-
-
+//    private List<Items> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,16 @@ public class VenueListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         Log.d(TAG, "************************set the reecyclerView variable to the RecyclerView data type - look in xml files to find recyclerview layout to be able to display the data in the recycler view*******************");
 
+        // use a linear layout manager
+        recylerViewLayoutManager = new LinearLayoutManager(this);
+        // set the layout to vertical
+//        recylerViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(recylerViewLayoutManager);
+
+        // giving RecyclerViewAdapter permission to display the private itemList array
+        recyclerViewAdapter = new RecyclerViewAdapter(context, locations);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
         // check to see if the mobile phone is connected to the internet
         if(isNetworkConnected(getApplicationContext()))
         {
@@ -95,9 +102,6 @@ public class VenueListActivity extends AppCompatActivity {
 
             /* json array response url  */
             String url_locations = "https://skill-shot-dev.herokuapp.com/locations.json";
-
-
-
 
             RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -128,26 +132,29 @@ public class VenueListActivity extends AppCompatActivity {
 
                             locations[i] = location; // add to locations list for later use
 
-                            locations[i].setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View i) {
-
-                                    int index = Integer.parseInt(locations[i].getId().substring(1));
-                                    Location location = locations[index];
-
-                                    Intent intent = new Intent(VenueListActivity.this,VenueDetailActivity.class);
-                                    intent.putExtra("name", location.getName());
-                                    intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-                                    intent.putExtra("phone", location.getPhone());
-                                    intent.putExtra("website", location.getUrl());
-                                    intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
-                                    intent.putExtra("age allowed", location.isAll_ages());
-                                    startActivity(intent);
-
-                                }   /* end of onInfoWindowClick  */
-                            });   /*  end of setOnClickListener  */
+//                            locations[i].setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View i) {
+//
+//                                    int index = Integer.parseInt(locations[i].getId().substring(1));
+//                                    Location location = locations[index];
+//
+//                                    Intent intent = new Intent(VenueListActivity.this,VenueDetailActivity.class);
+//                                    intent.putExtra("name", location.getName());
+//                                    intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+//                                    intent.putExtra("phone", location.getPhone());
+//                                    intent.putExtra("website", location.getUrl());
+//                                    intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+//                                    intent.putExtra("age allowed", location.isAll_ages());
+//                                    startActivity(intent);
+//
+//                                }   /* end of onInfoWindowClick  */
+//                            });   /*  end of setOnClickListener  */
 
                         }   /*  end of for loop  */
+                        // trigger refresh of recycler view
+                        Log.d("JSON", "update data");
+                        recyclerViewAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
                         Log.d("JSON", e.getMessage());
@@ -168,32 +175,8 @@ public class VenueListActivity extends AppCompatActivity {
                     });                       /* }end of Response.ErrorListener )endofJsonArrayRequest with errorlistener   */
 
 			/* Add the request to the RequestQueue.  */
-			/* queue.add(jsonReq);   */
+			queue.add(jsonReq);
 
-            JsonParse parse = new JsonParse();
-            List<Items> itemsList = parse.JsonParse(jsonReq);
-
-			/*  add the data to the recyclerview  */
-            RecyclerViewAdapter rva = new RecyclerViewAdapter(getApplicationContext(), itemsList);
-            recyclerView.setAdapter(rva);
-
-            // Access the requestqueue via singleton class
-            VolleySingleton.getInstance(this).addToRequestQueue(jsonReq);
-            //create the layout manager (Change 2 to your choice because here 2 is the number of Grid layout Columns in each row).
-            LinearLayoutManager llm = new LinearLayoutManager(this);
-            Log.d(TAG, "*****************************Linear Layout Manager created*********************************");
-
-            // set the layout to vertical
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            Log.d(TAG, "*****************************set Layout Manager *********************************");
-            // set the recyclerview's layout manager to llm
-            recyclerView.setLayoutManager(llm);
-
-            // giving RecyclerViewAdapter permission to display the private itemList array
-            recyclerViewAdapter = new RecyclerViewAdapter(context,itemList);
-            Log.d(TAG, "*****************************new recyclerViewAdapter *********************************");
-            recyclerView.setAdapter(recyclerViewAdapter);
-            Log.d(TAG, "*****************************set Adapter *********************************");
 
         }    /*   end of if is network connected = true  */
         else
@@ -211,10 +194,6 @@ public class VenueListActivity extends AppCompatActivity {
         NetworkInfo nti = cm.getActiveNetworkInfo();
         return nti != null && nti.isConnectedOrConnecting();
     }
-
-
-
-
 
     public float userDistance(double latitude, double longitude) {
         float[] aDistance = new float[1];

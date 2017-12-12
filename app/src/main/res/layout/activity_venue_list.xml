@@ -22,11 +22,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.SearchBar
+    <!--android.support.v7.widget.SearchBar
         android:id="@+id/action_search_bar"
         android:title="Search"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView" /-->
 
 
     <android.support.v7.widget.RecyclerView

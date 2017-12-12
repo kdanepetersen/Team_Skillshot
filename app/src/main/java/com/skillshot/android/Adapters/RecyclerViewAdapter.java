@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.skillshot.android.R;
+import com.skillshot.android.rest.model.Location;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static final String TAG = RecyclerViewAdapter.class.getSimpleName();
 
     // create item list
-    private List<Items> itemList;
+    private Location[] locations;
     Context context;
 
     //   CREATE THE VIEWHOLDER TEMPLATE - A JAVA CONNECTION TO THE VARIABLES IN THE XML FILE
@@ -45,14 +46,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     // pass the items to the recyclerviewadapter
-    public RecyclerViewAdapter(Context context, List<Items> itemList){
+    public RecyclerViewAdapter(Context context, Location[] locations){
 
         Log.d(TAG, "******************* RecyclerViewAdapter started***************************");
-        this.itemList = itemList;
+        this.locations = locations;
         // recyclerview has to have access to the context
         this.context = context;
     }
-
 
     // override the recyclerviewadapter in the Android library
     // return a recyclerViewAdapter viewholder after calling the onCreateViewHolder method, sending in ViewGroup parent and viewType
@@ -72,23 +72,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder Vholder, int position){
         Log.d(TAG, "******************* onBindViewHolder started***************************");
 
-        Items k = itemList.get(position);
+        Location location = locations[position];
 
-        Vholder.tv_id.setText(k.id);
+        Vholder.tv_id.setText(location.getId());
         Vholder.tv_id.setTextColor(Color.BLACK);
-        Vholder.tv_name.setText(k.name);
+        Vholder.tv_name.setText(location.getName());
         Vholder.tv_name.setTextColor(Color.BLACK);
-        Vholder.tv_latitude.setText(k.latitude);
+//        Vholder.tv_latitude.setText(location.getLatitude().);
         Vholder.tv_latitude.setTextColor(Color.BLACK);
-        Vholder.tv_longitude.setText(k.longitude);
+//        Vholder.tv_longitude.setText(location.getLongitude());
         Vholder.tv_longitude.setTextColor(Color.BLACK);
-        Vholder.tv_num_games.setText(k.num_games);
+        Vholder.tv_num_games.setText(location.getNum_games());
         Vholder.tv_num_games.setTextColor(Color.BLACK);
     }
 
     @Override
     public int getItemCount(){
         Log.d(TAG, "******************* getItemCount started***************************");
-        return itemList.size();
+        if (locations != null) {
+            Log.d(TAG, String.valueOf(locations.length));
+            return locations.length;
+        } else {
+            return 0;
+        }
     }
+
 }
