@@ -9,14 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
+
+//import android.view.View;
+//import android.widget.ListView;
+//import android.widget.TextView;
+
 import android.widget.Toast;
 import android.widget.ImageButton;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.content.Intent;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,10 +27,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,7 +37,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
+
+//import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
@@ -51,16 +50,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//import java.io.Console;
 //import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Hashtable;
 //import java.util.List;
-//import java.util.Map;
+//
+//
+////import java.io.Console;
+////import java.util.ArrayList;
+////import java.util.HashMap;
+////import java.util.Hashtable;
+////import java.util.List;
+////import java.util.Map;
+//
+//public abstract class MainActivity extends AppCompatActivity implements OnMapReadyCallback,OnClickListener {
+//
+////public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-public abstract class MainActivity extends AppCompatActivity implements OnMapReadyCallback,OnClickListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-//public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
     private static final float DEFAULT_ZOOM = 15;
     public static double SHORTYS_LAT = 47.613834;
@@ -69,21 +75,27 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
     private Location userLocation = null;
     public static final float MILES_PER_METER = (float) 0.000621371192;
 
-    // json array response url
-    String url = "https://skill-shot-dev.herokuapp.com/";
-    String url_locations = String.format("%s/locations.json", url);
+
+////    // json array response url
+//    String url = "https://skill-shot-dev.herokuapp.com/";
+//    String url_locations = String.format("%s/locations.json", url);
+//
+//    private Location[] locations;
+//    private JSONObject locationData;
+//
+//    //..................
+//    private static final String TAG = MainActivity.class.getSimpleName();
+//    private ProgressDialog pDialog;
+//    private List<Location> MachineList = new ArrayList<>();
+//    private ListView listView;
+//    private CustomeMachineListAdapter machineAdapter;
+
+    //.................
 
     private Location[] locations;
     private JSONObject locationData;
 
-    //..................
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private ProgressDialog pDialog;
-    private List<Location> MachineList = new ArrayList<>();
-    private ListView listView;
-    private CustomeMachineListAdapter machineAdapter;
 
-    //.................
 
 
 //    ArrayList<JSONObject> venues = new ArrayList<>();
@@ -95,18 +107,23 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
         ImageButton footer_list=(ImageButton)findViewById(R.id.footer_list);
         ImageButton footer_description=(ImageButton)findViewById(R.id.footer_description);
+        ImageButton backarrow=(ImageButton)findViewById(R.id.backarrow);
+        ImageButton page_title=(ImageButton)findViewById(R.id.page_title);
+        ImageButton skillshotlogo=(ImageButton)findViewById(R.id.skillshotlogo);
+        ImageButton allages=(ImageButton)findViewById(R.id.allages);
+        ImageButton list_search=(ImageButton)findViewById(R.id.list_search);
 
         footer_map.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +132,7 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -124,7 +141,51 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backarrow.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        page_title.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        skillshotlogo.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        allages.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        list_search.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -234,11 +295,12 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
 
 
 
-    /**
+ /*
      * Method to make json object request where json response starts wtih {
      * */
     public void loadMarkers() {
         Log.d("JSON", "loadMarkers");
+        String url_locations = "https://skill-shot-dev.herokuapp.com/locations.json";
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonReq = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
             @Override
@@ -247,44 +309,31 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
                 locations = new Location[response.length()];
                 try {
                     for(int i = 0; i < response.length(); i++){
-
                         Location location = new Location();
 
-                        final JSONObject locObject = (JSONObject) response.get(i);
-
-                        //adding each element to an arraylist
-//                        venues.add(locObject);
-//
-//                        Log.d(TAG, "Ghebrehiwet " + locObject.getString("name"));
-////                        getting all objects in a list
-//                        if (venues != null) {
-//                            for (i = 0; i < venues.size(); i++) {
-//                                JSONObject venue = venues.get(i);
-////                                Log.d(TAG, "Ghebre "+ venue);
-//                                String nameObject = venue.getString("name");
-//                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-//                                intent.putExtra("nameObject",nameObject);
-//                                Log.d(TAG, "Ghebre "+ nameObject);
-//                            }
-//                        }
 
 
-                        location.setId(locObject.getString("id"));
-                        location.setName(locObject.getString("name"));
-                        location.setAddress(locObject.getString("address"));
-                        location.setCity(locObject.getString("city"));
-                        location.setPostal_code(locObject.getString("postal_code"));
-                        location.setLatitude((float)locObject.getDouble("latitude"));
-                        location.setLongitude((float)locObject.getDouble("longitude"));
-                        location.setPhone(locObject.getString("phone"));
-                        location.setUrl(locObject.getString("url"));
-                        location.setAll_ages(locObject.getBoolean("all_ages"));
-                        location.setNum_games(locObject.getInt("num_games"));
+                        locationData = (JSONObject) response
+                                .get(i);
 
 
-                        locations[i] = location;
+                        location.setId(locationData.getString("id"));
+                        location.setName(locationData.getString("name"));
+                        location.setAddress(locationData.getString("address"));
+                        location.setCity(locationData.getString("city"));
+                        location.setPostal_code(locationData.getString("postal_code"));
+                        location.setLatitude((float)locationData.getDouble("latitude"));
+                        location.setLongitude((float)locationData.getDouble("longitude"));
+                        location.setPhone(locationData.getString("phone"));
+                        location.setUrl(locationData.getString("url"));
+                        location.setAll_ages(locationData.getBoolean("all_ages"));
+                        location.setNum_games(locationData.getInt("num_games"));
+
+ 
+                        locations[i] = location; // add to locations list for later use
 
                         addMarker(location);
+
 
                         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                             @Override
@@ -292,12 +341,6 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
                                 int index = Integer.parseInt(marker.getId().substring(1));
                                 Location location = locations[index];
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-
-
-//                                intent.putExtra("name", marker.getTitle() );
-//
-//                                intent.putExtra("address", marker.getSnippet());
-
 
                                 intent.putExtra("name", location.getName());
                                 intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
@@ -311,6 +354,8 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
                         });
 
                     }
+
+
                 } catch (JSONException e) {
                     Log.d("JSON", e.getMessage());
                 }
@@ -324,10 +369,6 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         });
         // Add the request to the RequestQueue.
         queue.add(jsonReq);
-
-
-
-
     }
 
         public float userDistance(double latitude, double longitude) {
@@ -366,7 +407,8 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         }
 
 
-        //setting and adding marker on to the map page
+
+//        //setting and adding marker on to the map page
         private void addMarker(final Location location) {
             LatLng lt = new LatLng(location.getLatitude(), location.getLongitude());
             if (location.getCity().equals(" ")){
@@ -374,6 +416,7 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
                         .position(lt)
                         .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
                         .title(location.getName())).showInfoWindow();
+
             }
             else {
                 map.addMarker(new MarkerOptions()
@@ -381,6 +424,7 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
                         .icon(BitmapDescriptorFactory.defaultMarker(SKILL_SHOT_YELLOW))
                         .snippet(location.getNum_games() + " games " + location.getName() + location.getId() + ", " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code())
                         .title(location.getName())).showInfoWindow();
+
             }
 
     }
@@ -412,22 +456,34 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
-        switch (id){
-            case R.id.action_settings:
-                return true;
-            case R.id.action_venue_detail:
-//                startActivity(new Intent(MainActivity.this, VenueDetailActivity.class));
-//                break;
-//                openVenueDetailPage();
-                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()){
+//            case R.id.action_settings:
 //                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+//            case R.id.action_venue_detail:
+//
+//////                startActivity(new Intent(MainActivity.this, VenueDetailActivity.class));
+//////                break;
+//////                openVenueDetailPage();
+////                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//////                return true;
+//
+//
+////                startActivity(new Intent(this, VenueDetailActivity.class));
+////                return true;
+//                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//                return  true;
+//
+//            default:
+//                break;
 
         }
+
 //        return true;
+
+        return super.onOptionsItemSelected(item);
+
     }
 
 
@@ -449,6 +505,7 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
         }
         return  false;
     }
+
 
 
 //    private void openVenueDetailPage() {
@@ -474,6 +531,9 @@ public abstract class MainActivity extends AppCompatActivity implements OnMapRea
 ////    //.................
 //
 //    }
+
+
+
 
 }
 
