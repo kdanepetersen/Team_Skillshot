@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             {
 
 
-                Intent intent = new Intent(MainActivity.this, VenueListActivity.class);
+//                Intent intent = new Intent(MainActivity.this, VenueListActivity.class);
 
-                startActivity(intent);
+//                startActivity(intent);
             }
         });
 
