@@ -5,7 +5,17 @@
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="action_map">Map</string>
+<<<<<<< HEAD
     <string name="action_settings">Settings</string>
+=======
+    <string name="website">Website</string>
+    <string name="footer_map">Map</string>
+    <string name="footer_list">List</string>
+    <string name="footer_description">Description</string>
+    <string name="mapToThisLocation">Map to this location</string>
+    <string name="callThisLocation">Call this location</string>
+    <string name="action_add_game">Add game</string>
+>>>>>>> skillshot/master
     <string name="all_ages">All ages</string>
     <string name="alphabetical">A-Z</string>
     <string name="app_name">SkillShot</string>
@@ -24,8 +34,7 @@
     <string name="phone_number">Here is the phone number:</string>
     <string name="sort">Sort</string>
     <string name="searchs">Enter a search string</string>
-    <string name="title_activity_venue_detail">VenueDetailActivity</string>
-    <string name="title_activity_venue_list">VenueListActivity</string>
+    
     <string name="twentyone_plus">21+</string>
     <string name="website">Website</string>
 </resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:layout_height="50dp"
+    android:background="#FC0"
+    android:gravity="center" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="20dp"
+        android:text=""
+        android:textColor="#000"
+        android:textSize="15sp" />
+
+    <ImageButton
+        android:id="@+id/backarrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:background="@drawable/backarrow"
+        android:onClick="back" />
+
+    <ImageButton
+        android:id="@+id/page_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@drawable/page_title"
+        android:onClick="page_title"
+        android:text=""/>
+
+    <ImageButton
+        android:id="@+id/skillshotlogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@drawable/skillshotlogo"
+        android:onClick="skillshotlogo" />
+
+    <ImageButton
+        android:id="@+id/allages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:background="@drawable/allages"
+        android:onClick="allages" />
+
+    <ImageButton
+        android:id="@+id/list_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:layout_alignRight="@id/list_search"
+        android:background="@drawable/list_search"
+        android:onClick="list_search"/>
+
+</RelativeLayout>

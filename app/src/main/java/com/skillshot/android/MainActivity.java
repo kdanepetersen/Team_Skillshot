@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.ImageButton;
+import android.view.View;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static String TAG = VenueListActivity.class.getSimpleName();
     public static final float MILES_PER_METER = (float) 0.000621371192;
 
-//    private JSONObject locationData;
-
-
     private Location[] locations;
     private JSONObject locationData;
 
@@ -58,9 +57,88 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
+        ImageButton footer_list=(ImageButton)findViewById(R.id.footer_list);
+        ImageButton footer_description=(ImageButton)findViewById(R.id.footer_description);
+        ImageButton backarrow=(ImageButton)findViewById(R.id.backarrow);
+        ImageButton page_title=(ImageButton)findViewById(R.id.page_title);
+        ImageButton skillshotlogo=(ImageButton)findViewById(R.id.skillshotlogo);
+        ImageButton allages=(ImageButton)findViewById(R.id.allages);
+        ImageButton list_search=(ImageButton)findViewById(R.id.list_search);
+
+        footer_map.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        footer_list.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        footer_description.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backarrow.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        page_title.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        skillshotlogo.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        allages.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        list_search.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
         //initializeMap();
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -283,4 +361,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return  false;
     }
-    }
+}
