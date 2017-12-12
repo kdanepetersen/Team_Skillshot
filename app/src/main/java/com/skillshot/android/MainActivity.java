@@ -34,6 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
     private static final float DEFAULT_ZOOM = 15;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static double SHORTYS_LONG = -122.345043;
     private GoogleMap map;
     private Location userLocation = null;
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static String TAG = VenueListActivity.class.getSimpleName();
     public static final float MILES_PER_METER = (float) 0.000621371192;
 
 //    private JSONObject locationData;
@@ -147,13 +149,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-        public float userDistance(double latitude, double longitude) {
-            float[] aDistance = new float[1];
-            android.location.Location.distanceBetween(getUserLocation().getLatitude(),
-                    getUserLocation().getLongitude(), latitude, longitude, aDistance);
-            return aDistance[0];
+    public float userDistance(double latitude, double longitude) {
+        float[] aDistance = new float[1];
+        android.location.Location.distanceBetween(getUserLocation().getLatitude(),
+                getUserLocation().getLongitude(), latitude, longitude, aDistance);
+        return aDistance[0];
+    }
+
+    private class DistanceSort implements Comparator<Location> {
+
+        @Override
+        public int compare(Location a, Location b) {
+            return Float.compare(userDistance(a), userDistance(b));
         }
 
+    }
 
 
         public String userDistanceString(com.skillshot.android.rest.model.Location location) {

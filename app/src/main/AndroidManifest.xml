@@ -33,7 +33,33 @@
         <activity
             android:name=".VenueDetailActivity"
             android:label="@string/title_activity_venue_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+            android:name=".VenueListActivity"
+            android:label="@string/title_activity_venue_list"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Defining parent's for each of the activities to return to Index when the up arrow is selected -->
+
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.skillshot.android.MainActivity" />
+
+
+
+
+
+
     </application>
 
 </manifest>
