@@ -9,24 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,19 +30,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.skillshot.android.rest.model.Location;
+import com.skillshot.android.rest.model.Machine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private final int SKILL_SHOT_YELLOW = 42;
@@ -62,8 +52,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // json array response url
     String url = "https://skill-shot-dev.herokuapp.com/";
     String url_locations = String.format("%s/locations.json", url);
+    private Object location_id;
+    String url_machines = String.format("%s/locations/%s/machines.json", url, location_id);
 
     private Location[] locations;
+    private Machine[] machines;
     private JSONObject locationData;
 
     //..................
@@ -198,36 +191,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * */
     public void loadMarkers() {
         Log.d("JSON", "loadMarkers");
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonReq = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
+        RequestQueue queueLocation = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonReqLocation = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONArray responseLoc) {
                 Log.d("JSON", "onResponse");
-                locations = new Location[response.length()];
+                locations = new Location[responseLoc.length()];
                 try {
-                    for(int i = 0; i < response.length(); i++){
+                    for(int i = 0; i < responseLoc.length(); i++){
 
                         Location location = new Location();
 
-                        final JSONObject locObject = (JSONObject) response.get(i);
-
-                        //adding each element to an arraylist
-//                        venues.add(locObject);
-//
-//                        Log.d(TAG, "Ghebrehiwet " + locObject.getString("name"));
-////                        getting all objects in a list
-//                        if (venues != null) {
-//                            for (i = 0; i < venues.size(); i++) {
-//                                JSONObject venue = venues.get(i);
-////                                Log.d(TAG, "Ghebre "+ venue);
-//                                String nameObject = venue.getString("name");
-//                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-//                                intent.putExtra("nameObject",nameObject);
-//                                Log.d(TAG, "Ghebre "+ nameObject);
-//                            }
-//                        }
-
-
+                        final JSONObject locObject = (JSONObject) responseLoc.get(i);
                         location.setId(locObject.getString("id"));
                         location.setName(locObject.getString("name"));
                         location.setAddress(locObject.getString("address"));
@@ -251,11 +226,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 int index = Integer.parseInt(marker.getId().substring(1));
                                 Location location = locations[index];
                                 Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
-
-
-//                                intent.putExtra("name", marker.getTitle() );
-//
-//                                intent.putExtra("address", marker.getSnippet());
 
 
                                 intent.putExtra("name", location.getName());
@@ -282,12 +252,72 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         });
         // Add the request to the RequestQueue.
-        queue.add(jsonReq);
+        queueLocation.add(jsonReqLocation);
+    }
 
 
+    public Machine[] getMachines(final Machine[] machines){
+        for(int i = 0; i < machines.length; i++){
+            loadMarkers();
+            Log.d("JSON", "loadMarkers");
+            RequestQueue queueMachine = Volley.newRequestQueue(this);
+            JsonArrayRequest jsonReqMachine = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray responseMachine) {
+                    Log.d("JSON", "onResponse");
+                    try {
+                        for(int i = 0; i < responseMachine.length(); i++){
+
+                            final Machine machine = new Machine();
+
+                            final JSONObject machineObject = (JSONObject) responseMachine.get(i);
+                            machine.setId(machineObject.getInt("id"));
+//                            machine.setTitle(machineObject.getTitle("title"));
+
+
+
+                            Log.d(TAG, "Ghebre " +  machines);
+
+                            machines[i] = machine;
+
+//                            map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+//                                @Override
+//                                public void onInfoWindowClick(Marker marker) {
+//                                    int index = Integer.parseInt(marker.getId().substring(1));
+////                                    Machine machine = Machine[index];
+//                                    Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
+//
+//
+//                                    intent.putExtra("id", machine.getId());
+//
+//                                    startActivity(intent);
+//
+//                                }
+//                            });
+
+                        }
+                    } catch (JSONException e) {
+                        Log.d("JSON", e.getMessage());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("JSON", "Error: " + error.getMessage());
+                }
+
+            });
+            // Add the request to the RequestQueue.
+            queueMachine.add(jsonReqMachine);
+
+        }
+        return machines;
 
 
     }
+
+
+
 
         public float userDistance(double latitude, double longitude) {
             float[] aDistance = new float[1];
@@ -347,7 +377,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -414,21 +443,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-
-//    //...............
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        hidePDialog()MachineList;
-//    }
-//
-    private void hidePDialog() {
-        if (pDialog != null) {
-            pDialog.dismiss();
-            pDialog = null;
-        }
-    }
-//
-//    //.................
 
     }
