@@ -6,66 +6,57 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_height="wrap_content"
-    android:background="#FC0"
+    android:background="#000"
     android:gravity="center">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginTop="20dp"
-        android:text=""
-        android:textColor="#000"
-        android:textSize="15sp"
-        android:layout_weight="1"/>
 
     <ImageButton
         android:id="@+id/backarrow"
-        android:layout_width="wrap_content"
+        android:layout_width="21dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
         android:background="@drawable/backarrow"
-        android:onClick="back"
-        android:layout_weight="1"/>
+        android:onClick="back" />
 
-    <ImageButton
-        android:id="@+id/page_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:background="@drawable/page_title"
-        android:onClick="page_title"
-        android:text=""
-        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="51dp"
+        android:layout_height="37dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="25dp"
+        android:layout_weight="1"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="#FFC90E"
+        android:textSize="21sp" />
 
     <ImageButton
         android:id="@+id/skillshotlogo"
-        android:layout_width="wrap_content"
+        android:layout_width="83dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/skillshotlogo"
-        android:onClick="skillshotlogo"
-        android:layout_weight="1"/>
+        android:onClick="skillshotlogo" />
 
     <ImageButton
         android:id="@+id/allages"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/allages"
-        android:onClick="allages"
-        android:layout_weight="1"/>
+        android:onClick="allages" />
 
     <ImageButton
         android:id="@+id/list_search"
-        android:layout_width="wrap_content"
+        android:layout_width="23dp"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
         android:layout_alignRight="@id/list_search"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/list_search"
-        android:onClick="list_search"
-        android:layout_weight="1"/>
+        android:onClick="list_search" />
 
 </LinearLayout>
