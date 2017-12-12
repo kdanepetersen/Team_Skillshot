@@ -17,7 +17,6 @@
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="15dp"
-        android:layout_weight="1"
         android:background="@drawable/map_button_default"
         android:onClick="footer_map"
         android:text="@string/footer_map"/>
@@ -28,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
-        android:layout_weight="1"
         android:background="@drawable/list_button_default"
         android:onClick="footer_list"
         android:text="@string/footer_list"/>
@@ -37,10 +35,9 @@
         android:id="@+id/footer_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
-        android:layout_weight="1"
         android:background="@drawable/description_button_default"
         android:onClick="footer_description"
         android:text="@string/footer_description"/>
