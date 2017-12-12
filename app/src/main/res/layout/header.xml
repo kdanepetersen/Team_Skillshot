@@ -6,7 +6,7 @@
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
     android:layout_height="wrap_content"
-    android:background="#FC0"
+    android:background="#000"
     android:gravity="center">
 
     <TextView
@@ -23,40 +23,40 @@
         android:id="@+id/backarrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
         android:background="@drawable/backarrow"
-        android:onClick="back"
-        android:layout_weight="1"/>
+        android:onClick="back" />
 
     <ImageButton
         android:id="@+id/page_title"
-        android:layout_width="wrap_content"
+        android:layout_width="97dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/page_title"
         android:onClick="page_title"
-        android:text=""
-        android:layout_weight="1"/>
+        android:text="" />
 
     <ImageButton
         android:id="@+id/skillshotlogo"
-        android:layout_width="wrap_content"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/skillshotlogo"
-        android:onClick="skillshotlogo"
-        android:layout_weight="1"/>
+        android:onClick="skillshotlogo" />
 
     <ImageButton
         android:id="@+id/allages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:layout_weight="1"
         android:background="@drawable/allages"
-        android:onClick="allages"
-        android:layout_weight="1"/>
+        android:onClick="allages" />
 
     <ImageButton
         android:id="@+id/list_search"

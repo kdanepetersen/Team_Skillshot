@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CustomeMachineListAdapter.class);
                 startActivity(intent);
             }
         });
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), VenueDetailActivity.class);
                 startActivity(intent);
             }
         });
@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                //startActivity(intent);
             }
         });
 
