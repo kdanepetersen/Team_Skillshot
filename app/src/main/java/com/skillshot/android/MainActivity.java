@@ -37,33 +37,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-//import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.skillshot.android.rest.model.Location;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//
-////import java.io.Console;
-////import java.util.ArrayList;
-////import java.util.HashMap;
-////import java.util.Hashtable;
-////import java.util.List;
-////import java.util.Map;
-//
-//public abstract class MainActivity extends AppCompatActivity implements OnMapReadyCallback,OnClickListener {
-//
-////public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -73,32 +57,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static double SHORTYS_LONG = -122.345043;
     private GoogleMap map;
     private Location userLocation = null;
+
+
+    private static String TAG = VenueListActivity.class.getSimpleName();
+
     public static final float MILES_PER_METER = (float) 0.000621371192;
-
-
-////    // json array response url
-//    String url = "https://skill-shot-dev.herokuapp.com/";
-//    String url_locations = String.format("%s/locations.json", url);
-//
-//    private Location[] locations;
-//    private JSONObject locationData;
-//
-//    //..................
-//    private static final String TAG = MainActivity.class.getSimpleName();
-//    private ProgressDialog pDialog;
-//    private List<Location> MachineList = new ArrayList<>();
-//    private ListView listView;
-//    private CustomeMachineListAdapter machineAdapter;
-
-    //.................
 
     private Location[] locations;
     private JSONObject locationData;
-
-
-
-
-//    ArrayList<JSONObject> venues = new ArrayList<>();
 
     List<Location> machineList = new ArrayList<>();
     
@@ -132,7 +98,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             public void onClick(View v)
             {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+
+                Intent intent = new Intent(MainActivity.this, VenueListActivity.class);
+
                 startActivity(intent);
             }
         });
@@ -334,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         addMarker(location);
 
-
                         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                             @Override
                             public void onInfoWindowClick(Marker marker) {
@@ -371,13 +339,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         queue.add(jsonReq);
     }
 
-        public float userDistance(double latitude, double longitude) {
-            float[] aDistance = new float[1];
-            android.location.Location.distanceBetween(getUserLocation().getLatitude(),
-                    getUserLocation().getLongitude(), latitude, longitude, aDistance);
-            return aDistance[0];
+    public float userDistance(double latitude, double longitude) {
+        float[] aDistance = new float[1];
+        android.location.Location.distanceBetween(getUserLocation().getLatitude(),
+                getUserLocation().getLongitude(), latitude, longitude, aDistance);
+        return aDistance[0];
+    }
+
+    private class DistanceSort implements Comparator<Location> {
+
+        @Override
+        public int compare(Location a, Location b) {
+            return Float.compare(userDistance(a), userDistance(b));
         }
 
+    }
 
 
         public String userDistanceString(com.skillshot.android.rest.model.Location location) {
@@ -451,39 +427,69 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         loadMarkers();
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+////        int id = item.getItemId();
+//
+//        switch (item.getItemId()){
+////            case R.id.action_settings:
+////                return true;
+////            case R.id.action_venue_detail:
+////
+////////                startActivity(new Intent(MainActivity.this, VenueDetailActivity.class));
+////////                break;
+////////                openVenueDetailPage();
+//////                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+////////                return true;
+////
+////
+//////                startActivity(new Intent(this, VenueDetailActivity.class));
+//////                return true;
+////                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+////                return  true;
+////
+////            default:
+////                break;
+//
+//        }
+//
+////        return true;
+//
+//        return super.onOptionsItemSelected(item);
+//
+//    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-
-        switch (item.getItemId()){
-//            case R.id.action_settings:
-//                return true;
-//            case R.id.action_venue_detail:
-//
-//////                startActivity(new Intent(MainActivity.this, VenueDetailActivity.class));
-//////                break;
-//////                openVenueDetailPage();
-////                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-//////                return true;
-//
-//
-////                startActivity(new Intent(this, VenueDetailActivity.class));
-////                return true;
-//                Toast.makeText(this, "Selected Item: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-//                return  true;
-//
-//            default:
-//                break;
-
+        switch (item.getItemId()) {
+            case R.id.backarrow:
+                // User chose the index item, show the search UI...
+                Intent home = new Intent(this, MainActivity.class);
+                startActivity(home);
+                return true;
+            case R.id.page_title:
+                // User chose the "login" item, show the login UI...
+                Intent venue_list = new Intent(this, VenueListActivity.class);
+                startActivity(venue_list);
+                return true;
+            case R.id.list_search:
+                // User chose the "display categories" action, display the fashion categories
+                Intent dc = new Intent(this, VenueListActivity.class);
+                startActivity(dc);
+                return true;
+            case R.id.action_map:
+                // User chose the "maps" action, display the map UI
+                Intent map = new Intent(this, MainActivity.class);
+                startActivity(map);
+                return true;
+            default:
+                // The user's action was not recognized. Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
-
-//        return true;
-
-        return super.onOptionsItemSelected(item);
-
     }
 
 

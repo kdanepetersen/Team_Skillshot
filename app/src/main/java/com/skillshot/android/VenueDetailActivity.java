@@ -1,13 +1,17 @@
 package com.skillshot.android;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,15 +51,12 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
     private ImageView venue_map_direction;
 
 
-    //..................
-
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private List<Location> machineList = new ArrayList<>();
     private ListView listView;
     private CustomeMachineListAdapter machineAdapter;
 
-    //.................
 
 
     List<Location> venues = new ArrayList<>();
@@ -71,88 +72,6 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//
-//        ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
-//        ImageButton footer_list=(ImageButton)findViewById(R.id.footer_list);
-//        ImageButton footer_description=(ImageButton)findViewById(R.id.footer_description);
-//        ImageButton backarrow=(ImageButton)findViewById(R.id.backarrow);
-//        ImageButton page_title=(ImageButton)findViewById(R.id.page_title);
-//        ImageButton skillshotlogo=(ImageButton)findViewById(R.id.skillshotlogo);
-//        ImageButton allages=(ImageButton)findViewById(R.id.allages);
-//        ImageButton list_search=(ImageButton)findViewById(R.id.list_search);
-//
-//
-//
-//        footer_map.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        footer_list.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        footer_description.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        backarrow.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        page_title.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        skillshotlogo.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        allages.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        list_search.setOnClickListener(new View.OnClickListener()
-//        {
-//            public void onClick(View v)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
 
         Bundle bundle = getIntent().getExtras();
@@ -254,9 +173,6 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 //            });
 //
 //        queue.add(locReq);
-////        AppController.getInstance().addToRequestQueue(locReq);
-
-
 
 
 //        venues.add();
@@ -275,6 +191,60 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
 //
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        // inflate my menu as a menu
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // look for id in the menu and set it to invisible
+        menu.findItem(R.id.action_venue_list).setVisible(false);
+
+        // https://developer.android.com/guide/topics/search/search-dialog.html
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search_bar).getActionView();
+
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        // searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_home:
+                // User chose the index item, show the search UI...
+                Intent home = new Intent(this, MainActivity.class);
+                startActivity(home);
+                return true;
+            case R.id.action_venue_list:
+                // User chose the "login" item, show the login UI...
+                Intent venue_list = new Intent(this, VenueListActivity.class);
+                startActivity(venue_list);
+                return true;
+            case R.id.action_venue_detail:
+                // User chose the "about" item, show the about UI...
+                Intent venue_detail = new Intent(this, VenueDetailActivity.class);
+                startActivity(venue_detail);
+                return true;
+            case R.id.action_settings:
+                // User chose the "display categories" action, display the fashion categories
+                Intent dc = new Intent(this, MainActivity.class);
+                startActivity(dc);
+                return true;
+            case R.id.action_map:
+                // User chose the "maps" action, display the map UI
+                Intent map = new Intent(this, MainActivity.class);
+                startActivity(map);
+                return true;
+            default:
+                // The user's action was not recognized. Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
