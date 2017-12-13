@@ -1,14 +1,11 @@
 package com.skillshot.android;
-import android.app.Dialog;
+
 import android.app.SearchManager;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,35 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.VolleyError;
-import com.skillshot.android.Adapters.Items;
-import com.skillshot.android.Adapters.JsonParse;
-import com.skillshot.android.Adapters.RecyclerViewAdapter;
-import com.skillshot.android.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.skillshot.android.Adapters.Items;
-import com.skillshot.android.Adapters.JsonParse;
-import com.skillshot.android.Adapters.RecyclerViewAdapter;
+import com.skillshot.android.Adapters.CustomAdapter;
 import com.skillshot.android.rest.model.Location;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +38,7 @@ public class VenueListActivity extends AppCompatActivity {
     Context context;
 
     // declare recyclerViewAdapter variable to display venue list in
-    RecyclerView.Adapter recyclerViewAdapter;
+    private CustomAdapter recyclerViewAdapter;
 
     // declaring how the item in the recyclerview will be layed out
     RecyclerView.LayoutManager recylerViewLayoutManager;
@@ -89,12 +65,10 @@ public class VenueListActivity extends AppCompatActivity {
 
         // use a linear layout manager
         recylerViewLayoutManager = new LinearLayoutManager(this);
-        // set the layout to vertical
-//        recylerViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(recylerViewLayoutManager);
 
         // giving RecyclerViewAdapter permission to display the private itemList array
-        recyclerViewAdapter = new RecyclerViewAdapter(context, locations);
+        recyclerViewAdapter = new CustomAdapter(context, locations);
         recyclerView.setAdapter(recyclerViewAdapter);
 
 
@@ -119,10 +93,10 @@ public class VenueListActivity extends AppCompatActivity {
                     locations = new Location[response.length()];
                     try {
                         for(int i = 0; i < response.length(); i++){
-                            Location location = new Location();
 
                             locationData = (JSONObject) response.get(i);
 
+                            Location location = new Location();
                             location.setId(locationData.getString("id"));
                             location.setName(locationData.getString("name"));
                             location.setAddress(locationData.getString("address"));
@@ -138,11 +112,9 @@ public class VenueListActivity extends AppCompatActivity {
 
                             locations[i] = location; // add to locations list for later use
 
-//                            recyclerViewAdapter.notifyDataSetChanged();
-
                         }   /*  end of for loop  */
                         // trigger refresh of recycler view
-                        Log.d("JSON", "update data");
+                        recyclerViewAdapter.setItems(locations);
                         recyclerViewAdapter.notifyDataSetChanged();
 
                     } catch (JSONException e) {
@@ -166,7 +138,6 @@ public class VenueListActivity extends AppCompatActivity {
 			/* Add the request to the RequestQueue.  */
 
 			queue.add(jsonReq);
-//            recyclerViewAdapter.notifyDataSetChanged();
 
         }    /*   end of if is network connected = true  */
         else {
