@@ -9,19 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.skillshot.android.R;
-import com.skillshot.android.VenueListActivity;
 import com.skillshot.android.rest.model.Location;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
-    private static final String TAG = RecyclerViewAdapter.class.getSimpleName();
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
+    private static final String TAG = CustomAdapter.class.getSimpleName();
 
     // create item list
     private Location[] locations;
-    Context context;
-
-//    VenueListActivity vList;
-//
-//    vList.getLocationData();
+    private Context context;
 
     //   CREATE THE VIEWHOLDER TEMPLATE - A JAVA CONNECTION TO THE VARIABLES IN THE XML FILE
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -53,17 +48,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     // pass the items to the recyclerviewadapter
-    public RecyclerViewAdapter(Context context, Location[] locations){
+    public CustomAdapter(Context context, Location[] locations){
 
         Log.d(TAG, "******************* RecyclerViewAdapter started***************************");
         this.locations = locations;
         // recyclerview has to have access to the context
         this.context = context;
     }
-
-    // override the recyclerviewadapter in the Android library
-    // return a recyclerViewAdapter viewholder after calling the onCreateViewHolder method, sending in ViewGroup parent and viewType
-    // EVERY TIME THE CARD IS CREATED, RUN ON CREATEVIEWHOLDER TO DISPLAY THE CARD OF DATA IN THE VIEWHOLDER
 
     @Override
     public  ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -89,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Vholder.tv_latitude.setTextColor(Color.BLACK);
 //        Vholder.tv_longitude.setText(location.getLongitude());
         Vholder.tv_longitude.setTextColor(Color.BLACK);
-        Vholder.tv_num_games.setText(location.getNum_games());
+//        Vholder.tv_num_games.setText(location.getNum_games());
         Vholder.tv_num_games.setTextColor(Color.BLACK);
     }
 
@@ -100,8 +91,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Log.d(TAG, String.valueOf(locations.length));
             return locations.length;
         } else {
+            Log.d(TAG, "no locations");
             return 0;
         }
+    }
+
+    public void setItems(Location[] items) {
+        this.locations = items;
     }
 
 }
