@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.skillshot.android.VenueDetailActivity">
 
+
+
+
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +25,17 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_venue_detail" />
+    <include layout="@layout/header"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="top"
+        android:visibility="visible"/>
+
+    <include
+        layout="@layout/footer"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

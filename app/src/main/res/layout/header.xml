@@ -26,7 +26,7 @@
         android:layout_margin="5dp"
         android:layout_marginTop="25dp"
         android:layout_weight="1"
-        android:text="@string/app_name"
+        android:text="@string/map_screen_title"
         android:textAlignment="center"
         android:textColor="#FFC90E"
         android:textSize="21sp" />

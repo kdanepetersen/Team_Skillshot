@@ -40,7 +40,20 @@
         android:layout_marginTop="19dp"
         android:scrollbars="vertical" />
 
+
+    <include layout="@layout/header"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="top"
+        android:visibility="visible"/>
+    
     <include layout="@layout/content_venue_list" />
 
 
+
+    <include
+        layout="@layout/footer"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"/>
 </LinearLayout>
