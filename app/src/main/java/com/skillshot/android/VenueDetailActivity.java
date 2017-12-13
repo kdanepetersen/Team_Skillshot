@@ -70,8 +70,81 @@ public class VenueDetailActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_venue_detail);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+        ImageButton footer_map=(ImageButton)findViewById(R.id.footer_map);
+        ImageButton footer_list=(ImageButton)findViewById(R.id.footer_list);
+        ImageButton footer_description=(ImageButton)findViewById(R.id.footer_description);
+        ImageButton backarrow=(ImageButton)findViewById(R.id.backarrow);
+        ImageButton skillshotlogo=(ImageButton)findViewById(R.id.skillshotlogo);
+        ImageButton allages=(ImageButton)findViewById(R.id.allages);
+        ImageButton list_search=(ImageButton)findViewById(R.id.list_search);
+
+        footer_map.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        footer_list.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+
+                Intent intent = new Intent(getApplicationContext(), VenueListActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        footer_description.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), VenueDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        backarrow.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        skillshotlogo.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        allages.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+//                allAges();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        list_search.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         Bundle bundle = getIntent().getExtras();

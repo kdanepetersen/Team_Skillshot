@@ -77,6 +77,9 @@ public class VenueListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getLocationData();
+
+
         // context (interface to the global information about your application) is your app, and is what connects to the other classes.  Get application context gets all the back end connection information
         context = getApplicationContext();
 
@@ -94,6 +97,10 @@ public class VenueListActivity extends AppCompatActivity {
         recyclerViewAdapter = new RecyclerViewAdapter(context, locations);
         recyclerView.setAdapter(recyclerViewAdapter);
 
+
+    }    /*   end of on create  */
+
+    public void getLocationData() {
         // check to see if the mobile phone is connected to the internet
         if(isNetworkConnected(getApplicationContext()))
         {
@@ -103,7 +110,7 @@ public class VenueListActivity extends AppCompatActivity {
             /* json array response url  */
             String url_locations = "https://skill-shot-dev.herokuapp.com/locations.json";
 
-            RequestQueue queue = Volley.newRequestQueue(this);
+            final RequestQueue queue = Volley.newRequestQueue(this);
 
             JsonArrayRequest jsonReq = new JsonArrayRequest(url_locations, new Response.Listener<JSONArray>() {
                 @Override
@@ -114,8 +121,7 @@ public class VenueListActivity extends AppCompatActivity {
                         for(int i = 0; i < response.length(); i++){
                             Location location = new Location();
 
-                            locationData = (JSONObject) response
-                                    .get(i);
+                            locationData = (JSONObject) response.get(i);
 
                             location.setId(locationData.getString("id"));
                             location.setName(locationData.getString("name"));
@@ -132,24 +138,7 @@ public class VenueListActivity extends AppCompatActivity {
 
                             locations[i] = location; // add to locations list for later use
 
-//                            locations[i].setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View i) {
-//
-//                                    int index = Integer.parseInt(locations[i].getId().substring(1));
-//                                    Location location = locations[index];
-//
-//                                    Intent intent = new Intent(VenueListActivity.this,VenueDetailActivity.class);
-//                                    intent.putExtra("name", location.getName());
-//                                    intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-//                                    intent.putExtra("phone", location.getPhone());
-//                                    intent.putExtra("website", location.getUrl());
-//                                    intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
-//                                    intent.putExtra("age allowed", location.isAll_ages());
-//                                    startActivity(intent);
-//
-//                                }   /* end of onInfoWindowClick  */
-//                            });   /*  end of setOnClickListener  */
+//                            recyclerViewAdapter.notifyDataSetChanged();
 
                         }   /*  end of for loop  */
                         // trigger refresh of recycler view
@@ -172,20 +161,20 @@ public class VenueListActivity extends AppCompatActivity {
 
                         }   /*  end of onErrorResponse*/
 
-                    });                       /* }end of Response.ErrorListener )endofJsonArrayRequest with errorlistener   */
+                    }); /* }end of Response.ErrorListener )endofJsonArrayRequest with errorlistener   */
 
 			/* Add the request to the RequestQueue.  */
-			queue.add(jsonReq);
 
+			queue.add(jsonReq);
+//            recyclerViewAdapter.notifyDataSetChanged();
 
         }    /*   end of if is network connected = true  */
-        else
-        {
+        else {
             // display toast indicating no internet connection, connect to the internet
             Toast.makeText(VenueListActivity.this, "No Internet Connection.  Please connect to the internet.", Toast.LENGTH_SHORT).show();
         }  /*  end of is network connected false */
+    }
 
-    }    /*   end of on create  */
 
     public static boolean isNetworkConnected(Context cntx){
         // look for the network connection and return a boolean if network is connected (True = 1) or not (false = 0)
@@ -314,16 +303,4 @@ public class VenueListActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

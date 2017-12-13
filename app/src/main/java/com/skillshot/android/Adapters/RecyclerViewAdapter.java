@@ -1,7 +1,4 @@
 package com.skillshot.android.Adapters;
-/**
- * Created by Dane on 11/11/2017.
- */
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.skillshot.android.R;
+import com.skillshot.android.VenueListActivity;
 import com.skillshot.android.rest.model.Location;
-
-import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = RecyclerViewAdapter.class.getSimpleName();
@@ -24,9 +19,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Location[] locations;
     Context context;
 
+//    VenueListActivity vList;
+//
+//    vList.getLocationData();
+
     //   CREATE THE VIEWHOLDER TEMPLATE - A JAVA CONNECTION TO THE VARIABLES IN THE XML FILE
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         // assign the variables for the xml file activity_pants_results_list
         public TextView tv_id;
         public TextView tv_name;
@@ -42,7 +40,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tv_latitude = (TextView) v.findViewById(R.id.tv_latitude);
             tv_longitude = (TextView) v.findViewById(R.id.tv_longitude);
             tv_num_games = (TextView) v.findViewById(R.id.tv_num_games);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Toast.makeText(context, "Location #: " + position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+
     }
 
     // pass the items to the recyclerviewadapter
@@ -59,7 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // EVERY TIME THE CARD IS CREATED, RUN ON CREATEVIEWHOLDER TO DISPLAY THE CARD OF DATA IN THE VIEWHOLDER
 
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public  ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         Log.d(TAG, "******************* RecyclerViewAdapter.ViewHolder started***************************");
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_result,parent,false);

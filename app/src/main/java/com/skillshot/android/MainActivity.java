@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v)
             {
 
-       Intent intent = new Intent(getApplicationContext(), CustomeMachineListAdapter.class);
+       Intent intent = new Intent(getApplicationContext(), VenueListActivity.class);
                 startActivity(intent);
 
             }
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         {
             public void onClick(View v)
             {
+//                allAges();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -297,15 +298,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onInfoWindowClick(Marker marker) {
                                 int index = Integer.parseInt(marker.getId().substring(1));
                                 Location location = locations[index];
-                                Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
 
-                                intent.putExtra("name", location.getName());
-                                intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
-                                intent.putExtra("phone", location.getPhone());
-                                intent.putExtra("website", location.getUrl());
-                                intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
-                                intent.putExtra("age allowed", location.isAll_ages());
-                                startActivity(intent);
+//                                try {
+//                                    if(locationData.getBoolean("all_ages")){
+                                        Intent intent = new Intent(MainActivity.this,VenueDetailActivity.class);
+
+                                        intent.putExtra("name", location.getName());
+                                        intent.putExtra("address", location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code());
+                                        intent.putExtra("phone", location.getPhone());
+                                        intent.putExtra("website", location.getUrl());
+                                        intent.putExtra("latlng", new LatLng(location.getLatitude(), location.getLongitude()));
+                                        intent.putExtra("age allowed", location.isAll_ages());
+                                        startActivity(intent);
+//                                    }
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+
 
                             }
                         });
@@ -343,6 +352,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
+
+
 
 
         public String userDistanceString(com.skillshot.android.rest.model.Location location) {
@@ -460,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent home = new Intent(this, MainActivity.class);
                 startActivity(home);
                 return true;
-            case R.id.action_venue_list:
+            case R.id.footer_list:
                 // User chose the "login" item, show the login UI...
                 Intent venue_list = new Intent(this, VenueListActivity.class);
                 startActivity(venue_list);
