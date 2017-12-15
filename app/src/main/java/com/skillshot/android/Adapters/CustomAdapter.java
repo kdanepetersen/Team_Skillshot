@@ -1,11 +1,14 @@
 package com.skillshot.android.Adapters;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.skillshot.android.R;
@@ -22,19 +25,23 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
         // assign the variables for the xml file activity_pants_results_list
         public TextView tv_id;
-        public TextView tv_name;
-        public TextView tv_latitude;
-        public TextView tv_longitude;
+//        public TextView tv_name;
+//        public TextView tv_latitude;
+//        public TextView tv_longitude;
         public TextView tv_num_games;
+        public  TextView tv_map;
+
+        private ImageView venue_map_direction;
 
         // create the viewholder
         public ViewHolder(View v){
             super(v);
             tv_id = (TextView) v.findViewById(R.id.tv_id);
-            tv_name = (TextView) v.findViewById(R.id.tv_name);
-            tv_latitude = (TextView) v.findViewById(R.id.tv_latitude);
-            tv_longitude = (TextView) v.findViewById(R.id.tv_longitude);
+//            tv_name = (TextView) v.findViewById(R.id.tv_name);
+//            tv_latitude = (TextView) v.findViewById(R.id.tv_latitude);
+//            tv_longitude = (TextView) v.findViewById(R.id.tv_longitude);
             tv_num_games = (TextView) v.findViewById(R.id.tv_num_games);
+            tv_map = (TextView)v.findViewById(R.id.tv_map);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,17 +78,45 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Log.d(TAG, "******************* onBindViewHolder started***************************");
 
         Location location = locations[position];
-
-        Vholder.tv_id.setText(location.getId());
-        Vholder.tv_id.setTextColor(Color.BLACK);
-        Vholder.tv_name.setText(location.getName());
-        Vholder.tv_name.setTextColor(Color.BLACK);
+        for(int j = 1; j <= locations.length-1; j++){
+            Vholder.tv_id.setText(position + 1 + ") "  + location.getId());
+            Vholder.tv_id.setTextColor(Color.BLACK);
+//            Vholder.tv_name.setText(location.getName());
+//            Vholder.tv_name.setTextColor(Color.BLACK);
 //        Vholder.tv_latitude.setText(location.getLatitude().);
-        Vholder.tv_latitude.setTextColor(Color.BLACK);
+//            Vholder.tv_latitude.setTextColor(Color.BLACK);
 //        Vholder.tv_longitude.setText(location.getLongitude());
-        Vholder.tv_longitude.setTextColor(Color.BLACK);
+//            Vholder.tv_longitude.setTextColor(Color.BLACK);
+            Vholder.tv_num_games.setText(" " + location.getNum_games() + " games");
+            Vholder.tv_num_games.setTextColor(Color.BLACK);
+
+            Vholder.tv_map.setText("MAP");
+            Vholder.tv_map.setTextColor(Color.BLACK);
+
+
+            final String address = (" " + location.getAddress() + ", " + location.getCity() + ", " + location.getPostal_code()).toString();
+            //on click of the map marker icon, map of that particular locations opens
+            Vholder.tv_map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){
+
+                    String uriBegin = "geo:0,0";
+                    String query = address;
+                    String encodedQuery = Uri.encode(query);
+                    String uriString = uriBegin + "?q=" + encodedQuery;
+                    Uri uri = Uri.parse(uriString);
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                    context.startActivity(intent);
+                }
+
+            });
+
+        }
+
 //        Vholder.tv_num_games.setText(location.getNum_games());
-        Vholder.tv_num_games.setTextColor(Color.BLACK);
+//        Vholder.tv_num_games.setTextColor(Color.BLACK);
+
+
     }
 
     @Override
