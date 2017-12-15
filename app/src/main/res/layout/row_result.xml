@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
-        card_view:cardBackgroundColor="#aed6f1"
-        card_view:cardCornerRadius="12dp"
-        android:clickable="true"
-        android:focusable="true"
-        card_view:cardElevation="3dp"
-        card_view:contentPadding="4dp"
-        android:id="@+id/card_view"
-        android:layout_margin="5dp"
-        >
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
+    android:layout_height="match_parent"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#963"
+    card_view:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardElevation="3dp"
+    card_view:contentPadding="4dp"
+    android:id="@+id/card_view" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_id"
@@ -26,44 +25,67 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:padding="16dp"
-                android:layout_marginRight="2dp"
+                android:layout_weight="3"
+                android:layout_marginRight="3dp"
                 android:layout_marginTop="4dp"/>
 
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tv_id"
-                android:layout_toRightOf="@id/tv_id"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="6dp" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toEndOf="@+id/tv_id"-->
+                <!--android:layout_toRightOf="@id/tv_id"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:layout_marginRight="6dp" />-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/venue_map_iv"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignTop="@+id/tv_name"-->
+                <!--android:layout_weight="1"-->
+                <!--app:srcCompat="@drawable/marker" />-->
 
             <TextView
-                android:id="@+id/tv_latitude"
+                android:id="@+id/tv_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tv_name"
-                android:layout_toRightOf="@id/tv_name"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="6dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="MAP"
+                android:layout_weight="1"/>
 
-            <TextView
-                android:id="@+id/tv_longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tv_latitude"
-                android:layout_toRightOf="@id/tv_latitude"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="6dp" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_latitude"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toEndOf="@+id/tv_name"-->
+                <!--android:layout_toRightOf="@id/tv_name"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:layout_marginRight="6dp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_longitude"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toEndOf="@+id/tv_latitude"-->
+                <!--android:layout_toRightOf="@id/tv_latitude"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:layout_marginRight="6dp" />-->
 
             <TextView
                 android:id="@+id/tv_num_games"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tv_longitude"
-                android:layout_toRightOf="@id/tv_longitude"
-                android:layout_marginTop="2dp" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@id/tv_map"
+                android:layout_weight="1"
+                />
+                <!--android:layout_toEndOf="@+id/tv_longitude"-->
+                <!--android:layout_toRightOf="@id/tv_longitude"-->
+                <!--android:layout_marginTop="2dp" />-->
+        </LinearLayout>
+    </LinearLayout>
 
 

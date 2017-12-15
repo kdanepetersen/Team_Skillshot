@@ -25,7 +25,7 @@ public class JsonParse {
                 String name = data.getString("name");
                 String latitude = data.getString("latitude");
                 String longitude = data.getString("longitude");
-                String num_games = data.getString("num_games");
+                int num_games = data.getInt("num_games");
                 Items items = new Items(id, name, latitude, longitude, num_games);
                 itemsList.add(items);
             }
